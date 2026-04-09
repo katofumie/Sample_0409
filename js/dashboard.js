@@ -169,10 +169,9 @@
       charts[canvasId].destroy();
     }
 
-    // Set canvas container height
-    var parent = canvas.parentElement;
+    // Set canvas container height - compact for laptop screens
     if (!canvas.closest('.chart-card').querySelector('.esg-progress-list')) {
-      canvas.style.height = '280px';
+      canvas.style.height = '200px';
     }
 
     charts[canvasId] = new Chart(canvas, config);
