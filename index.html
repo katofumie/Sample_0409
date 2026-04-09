@@ -3,11 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>全社ダッシュボード | 建設太郎建設株式会社</title>
+  <title>全社ダッシュボード | デモ</title>
   <link rel="stylesheet" href="css/style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 </head>
 <body>
+  <!-- ===== Demo Banner ===== -->
+  <div class="demo-banner">DEMO - 全社経営ダッシュボード ご提案プロトタイプ（表示データはサンプルです）</div>
+
   <!-- ===== Header ===== -->
   <header class="header">
     <div class="header-left">
@@ -24,17 +27,44 @@
       </div>
     </div>
     <div class="header-right">
+      <div class="live-indicator"><span class="pulse-dot"></span>リアルタイム</div>
       <span class="header-date" id="headerDate"></span>
+      <span class="header-clock" id="headerClock"></span>
       <div class="header-notification" id="notificationBtn">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
           <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
         </svg>
-        <span class="notification-badge">3</span>
+        <span class="notification-badge">5</span>
+        <!-- Notification Dropdown -->
+        <div class="notification-dropdown" id="notificationDropdown">
+          <div class="notif-header">通知一覧</div>
+          <div class="notif-item notif-danger">
+            <div class="notif-text">【虎ノ門タワー】実行予算超過見込 +3.2%</div>
+            <div class="notif-time">2時間前</div>
+          </div>
+          <div class="notif-item notif-warning">
+            <div class="notif-text">【横浜MM再開発】工程遅延 5日</div>
+            <div class="notif-time">5時間前</div>
+          </div>
+          <div class="notif-item notif-warning">
+            <div class="notif-text">【土木事業部】4月受注高 計画比82%</div>
+            <div class="notif-time">本日 10:30</div>
+          </div>
+          <div class="notif-item notif-info">
+            <div class="notif-text">【品川駅前再開発】竣工引渡し完了</div>
+            <div class="notif-time">昨日 17:00</div>
+          </div>
+          <div class="notif-item notif-info">
+            <div class="notif-text">【安全管理部】月次安全パトロール報告書提出済</div>
+            <div class="notif-time">昨日 15:20</div>
+          </div>
+        </div>
       </div>
       <div class="header-user">
-        <div class="avatar">山</div>
-        <span class="user-name">山田 太郎</span>
+        <div class="avatar">田</div>
+        <span class="user-name">田中 誠一郎</span>
+        <span class="user-role">代表取締役社長</span>
       </div>
     </div>
   </header>
@@ -143,6 +173,33 @@
         </div>
       </div>
 
+      <!-- 本日の現場天候 -->
+      <div class="weather-panel">
+        <div class="weather-title">本日の主要現場 天候情報</div>
+        <div class="weather-grid">
+          <div class="weather-item">
+            <div class="weather-location">東京（虎ノ門・新宿・品川）</div>
+            <div class="weather-info"><span class="weather-icon sun">●</span> 晴れ 22℃ <span class="weather-work ok">作業可</span></div>
+          </div>
+          <div class="weather-item">
+            <div class="weather-location">横浜（MM地区）</div>
+            <div class="weather-info"><span class="weather-icon cloud">●</span> 曇り 20℃ <span class="weather-work ok">作業可</span></div>
+          </div>
+          <div class="weather-item">
+            <div class="weather-location">大阪（梅田）</div>
+            <div class="weather-info"><span class="weather-icon rain">●</span> 雨 18℃ <span class="weather-work caution">屋外注意</span></div>
+          </div>
+          <div class="weather-item">
+            <div class="weather-location">名古屋（環状道路）</div>
+            <div class="weather-info"><span class="weather-icon sun">●</span> 晴れ 23℃ <span class="weather-work ok">作業可</span></div>
+          </div>
+          <div class="weather-item">
+            <div class="weather-location">福岡（天神）</div>
+            <div class="weather-info"><span class="weather-icon cloud">●</span> 曇り 21℃ <span class="weather-work ok">作業可</span></div>
+          </div>
+        </div>
+      </div>
+
       <div class="alert-section">
         <div class="alert-title">経営アラート</div>
         <div class="alert-list">
@@ -231,6 +288,7 @@
               <tr>
                 <th>プロジェクト名</th>
                 <th>種別</th>
+                <th>担当所長</th>
                 <th>契約金額</th>
                 <th>進捗率</th>
                 <th>粗利率</th>
@@ -242,6 +300,7 @@
               <tr>
                 <td class="project-name">虎ノ門タワー新築工事</td>
                 <td><span class="badge badge-blue">建築</span></td>
+                <td>佐藤 健一</td>
                 <td class="text-right">¥428億</td>
                 <td>
                   <div class="progress-cell">
@@ -256,6 +315,7 @@
               <tr>
                 <td class="project-name">横浜MM地区再開発</td>
                 <td><span class="badge badge-blue">建築</span></td>
+                <td>鈴木 大輔</td>
                 <td class="text-right">¥312億</td>
                 <td>
                   <div class="progress-cell">
@@ -270,6 +330,7 @@
               <tr>
                 <td class="project-name">首都高速 大規模更新工事</td>
                 <td><span class="badge badge-green">土木</span></td>
+                <td>高橋 正和</td>
                 <td class="text-right">¥287億</td>
                 <td>
                   <div class="progress-cell">
@@ -284,6 +345,7 @@
               <tr>
                 <td class="project-name">新宿南口駅ビル建替</td>
                 <td><span class="badge badge-blue">建築</span></td>
+                <td>渡辺 隆</td>
                 <td class="text-right">¥256億</td>
                 <td>
                   <div class="progress-cell">
@@ -298,6 +360,7 @@
               <tr>
                 <td class="project-name">東京湾岸トンネル工事</td>
                 <td><span class="badge badge-green">土木</span></td>
+                <td>伊藤 雅之</td>
                 <td class="text-right">¥198億</td>
                 <td>
                   <div class="progress-cell">
@@ -312,6 +375,7 @@
               <tr>
                 <td class="project-name">大阪梅田複合施設</td>
                 <td><span class="badge badge-blue">建築</span></td>
+                <td>中村 太一</td>
                 <td class="text-right">¥175億</td>
                 <td>
                   <div class="progress-cell">
