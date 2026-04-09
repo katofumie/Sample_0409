@@ -119,14 +119,44 @@
     });
   }
 
-  // ===== Header Date =====
+  // ===== Header Date & Live Clock =====
   function setHeaderDate() {
     var now = new Date();
     var opts = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'short' };
     document.getElementById('headerDate').textContent = now.toLocaleDateString('ja-JP', opts);
+    updateClock();
+    setInterval(updateClock, 1000);
+  }
+
+  function updateClock() {
+    var now = new Date();
     var hours = String(now.getHours()).padStart(2, '0');
     var mins = String(now.getMinutes()).padStart(2, '0');
-    document.getElementById('lastUpdate').textContent = hours + ':' + mins;
+    var secs = String(now.getSeconds()).padStart(2, '0');
+    var clockEl = document.getElementById('headerClock');
+    if (clockEl) clockEl.textContent = hours + ':' + mins + ':' + secs;
+    var updateEl = document.getElementById('lastUpdate');
+    if (updateEl) updateEl.textContent = hours + ':' + mins;
+  }
+
+  // ===== Notification Dropdown =====
+  function initNotification() {
+    var btn = document.getElementById('notificationBtn');
+    var dropdown = document.getElementById('notificationDropdown');
+    if (!btn || !dropdown) return;
+
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      dropdown.classList.toggle('open');
+    });
+
+    document.addEventListener('click', function () {
+      dropdown.classList.remove('open');
+    });
+
+    dropdown.addEventListener('click', function (e) {
+      e.stopPropagation();
+    });
   }
 
   // ===== Chart Helpers =====
@@ -790,6 +820,7 @@
     setHeaderDate();
     initNavigation();
     initSidebarToggle();
+    initNotification();
 
     // Initialize first section
     var activeSection = document.querySelector('.section.active');
