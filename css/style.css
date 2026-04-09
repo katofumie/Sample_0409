@@ -174,30 +174,20 @@ body {
   margin-left: -4px;
 }
 
-/* Live Indicator */
-.live-indicator {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--color-success);
-  background: var(--color-success-light);
+/* Back to Portal Link */
+.back-to-portal {
+  font-size: 0.8rem;
+  color: var(--color-primary);
+  text-decoration: none;
   padding: 4px 12px;
-  border-radius: 20px;
+  border: 1px solid var(--color-primary);
+  border-radius: 6px;
+  transition: background 0.15s, color 0.15s;
 }
 
-.pulse-dot {
-  width: 8px;
-  height: 8px;
-  background: var(--color-success);
-  border-radius: 50%;
-  animation: pulse 1.5s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.4; transform: scale(0.8); }
+.back-to-portal:hover {
+  background: var(--color-primary);
+  color: #fff;
 }
 
 .header-clock {

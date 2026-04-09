@@ -3,819 +3,365 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>全社ダッシュボード | デモ</title>
-  <link rel="stylesheet" href="css/style.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <title>社内ポータル | デモ</title>
+  <link rel="stylesheet" href="css/portal.css">
 </head>
 <body>
-  <!-- ===== Demo Banner ===== -->
-  <div class="demo-banner">DEMO - 全社経営ダッシュボード ご提案プロトタイプ（表示データはサンプルです）</div>
+  <!-- Demo Banner -->
+  <div class="demo-banner">DEMO - 社内ポータル ご提案プロトタイプ（表示データはサンプルです）</div>
 
   <!-- ===== Header ===== -->
   <header class="header">
     <div class="header-left">
-      <button class="sidebar-toggle" id="sidebarToggle" aria-label="メニュー切替">
-        <span></span><span></span><span></span>
-      </button>
-      <div class="header-logo">
-        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-          <rect x="2" y="14" width="8" height="12" rx="1" fill="#60a5fa"/>
-          <rect x="10" y="8" width="8" height="18" rx="1" fill="#3b82f6"/>
-          <rect x="18" y="2" width="8" height="24" rx="1" fill="#1d4ed8"/>
-        </svg>
-        <h1>全社ダッシュボード</h1>
-      </div>
+      <svg class="header-icon" width="28" height="28" viewBox="0 0 28 28" fill="none">
+        <rect x="2" y="14" width="8" height="12" rx="1" fill="#60a5fa"/>
+        <rect x="10" y="8" width="8" height="18" rx="1" fill="#3b82f6"/>
+        <rect x="18" y="2" width="8" height="24" rx="1" fill="#1d4ed8"/>
+      </svg>
+      <span class="header-company">ABC建設株式会社</span>
+    </div>
+    <div class="header-search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" placeholder="社内検索 ... 文書・社員・案件・マニュアル">
     </div>
     <div class="header-right">
-      <div class="live-indicator"><span class="pulse-dot"></span>リアルタイム</div>
       <span class="header-date" id="headerDate"></span>
-      <span class="header-clock" id="headerClock"></span>
-      <div class="header-notification" id="notificationBtn">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-        </svg>
-        <span class="notification-badge">5</span>
-        <!-- Notification Dropdown -->
-        <div class="notification-dropdown" id="notificationDropdown">
-          <div class="notif-header">通知一覧</div>
-          <div class="notif-item notif-danger">
-            <div class="notif-text">【虎ノ門タワー】実行予算超過見込 +3.2%</div>
-            <div class="notif-time">2時間前</div>
-          </div>
-          <div class="notif-item notif-warning">
-            <div class="notif-text">【横浜MM再開発】工程遅延 5日</div>
-            <div class="notif-time">5時間前</div>
-          </div>
-          <div class="notif-item notif-warning">
-            <div class="notif-text">【土木事業部】4月受注高 計画比82%</div>
-            <div class="notif-time">本日 10:30</div>
-          </div>
-          <div class="notif-item notif-info">
-            <div class="notif-text">【品川駅前再開発】竣工引渡し完了</div>
-            <div class="notif-time">昨日 17:00</div>
-          </div>
-          <div class="notif-item notif-info">
-            <div class="notif-text">【安全管理部】月次安全パトロール報告書提出済</div>
-            <div class="notif-time">昨日 15:20</div>
-          </div>
-        </div>
+      <div class="header-notif" id="notifBtn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="notif-badge">5</span>
       </div>
       <div class="header-user">
         <div class="avatar">田</div>
-        <span class="user-name">田中 誠一郎</span>
-        <span class="user-role">代表取締役社長</span>
+        <div class="user-info">
+          <span class="user-name">田中 誠一郎</span>
+          <span class="user-role">代表取締役社長</span>
+        </div>
       </div>
     </div>
   </header>
 
-  <!-- ===== Sidebar ===== -->
-  <aside class="sidebar" id="sidebar">
-    <nav class="sidebar-nav">
-      <a href="#" class="nav-item active" data-section="executive">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
-          <rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
-        </svg>
-        <span>経営サマリー</span>
-      </a>
-      <a href="#" class="nav-item" data-section="projects">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M2 20h20"/><path d="M5 20V8l7-5 7 5v12"/>
-          <rect x="9" y="12" width="6" height="8"/>
-        </svg>
-        <span>プロジェクト管理</span>
-      </a>
-      <a href="#" class="nav-item" data-section="safety">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-        </svg>
-        <span>安全・品質管理</span>
-      </a>
-      <a href="#" class="nav-item" data-section="personnel">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-          <circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-        </svg>
-        <span>人員・リソース</span>
-      </a>
-      <a href="#" class="nav-item" data-section="finance">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-        </svg>
-        <span>財務・資金管理</span>
-      </a>
-      <a href="#" class="nav-item" data-section="sales">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-        </svg>
-        <span>営業・受注管理</span>
-      </a>
-      <a href="#" class="nav-item" data-section="environment">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 22c4-4 8-7.5 8-12A8 8 0 0 0 4 10c0 4.5 4 8 8 12z"/>
-          <circle cx="12" cy="10" r="3"/>
-        </svg>
-        <span>環境・ESG</span>
-      </a>
-    </nav>
-    <div class="sidebar-footer">
-      <small>最終更新: <span id="lastUpdate"></span></small>
-    </div>
-  </aside>
+  <!-- ===== Nav Tabs ===== -->
+  <nav class="nav-tabs">
+    <a href="index.html" class="tab active">ポータル</a>
+    <a href="dashboard.html" class="tab">全社ダッシュボード</a>
+    <a href="#" class="tab">文書管理</a>
+    <a href="#" class="tab">社員名簿</a>
+    <a href="#" class="tab">管理者設定</a>
+  </nav>
 
   <!-- ===== Main Content ===== -->
-  <main class="main-content" id="mainContent">
+  <main class="portal-main">
 
-    <!-- ===== 1. 経営サマリー ===== -->
-    <section class="section active" id="section-executive">
-      <div class="section-header">
-        <h2>経営サマリー</h2>
-        <span class="section-period">2026年度 第1四半期</span>
-      </div>
-
-      <div class="kpi-grid">
-        <div class="kpi-card">
-          <div class="kpi-label">売上高</div>
-          <div class="kpi-value" data-target="2847">0</div>
-          <div class="kpi-unit">億円</div>
-          <div class="kpi-change positive">+5.2% 前年比</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">営業利益</div>
-          <div class="kpi-value" data-target="198">0</div>
-          <div class="kpi-unit">億円</div>
-          <div class="kpi-change positive">+8.1% 前年比</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">受注残高</div>
-          <div class="kpi-value" data-target="4521">0</div>
-          <div class="kpi-unit">億円</div>
-          <div class="kpi-change positive">+3.7% 前年比</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">完工高</div>
-          <div class="kpi-value" data-target="2634">0</div>
-          <div class="kpi-unit">億円</div>
-          <div class="kpi-change negative">-1.2% 前年比</div>
-        </div>
-      </div>
-
-      <div class="chart-row">
-        <div class="chart-card wide">
-          <div class="chart-title">受注高・完工高 月次推移</div>
-          <canvas id="chart-revenue-trend"></canvas>
-        </div>
-        <div class="chart-card">
-          <div class="chart-title">部門別売上構成</div>
-          <canvas id="chart-department"></canvas>
-        </div>
-      </div>
-
-      <!-- 本日の現場天候 -->
-      <div class="weather-panel">
-        <div class="weather-title">本日の主要現場 天候情報</div>
-        <div class="weather-grid">
-          <div class="weather-item">
-            <div class="weather-location">東京（虎ノ門・新宿・品川）</div>
-            <div class="weather-info"><span class="weather-icon sun">●</span> 晴れ 22℃ <span class="weather-work ok">作業可</span></div>
-          </div>
-          <div class="weather-item">
-            <div class="weather-location">横浜（MM地区）</div>
-            <div class="weather-info"><span class="weather-icon cloud">●</span> 曇り 20℃ <span class="weather-work ok">作業可</span></div>
-          </div>
-          <div class="weather-item">
-            <div class="weather-location">大阪（梅田）</div>
-            <div class="weather-info"><span class="weather-icon rain">●</span> 雨 18℃ <span class="weather-work caution">屋外注意</span></div>
-          </div>
-          <div class="weather-item">
-            <div class="weather-location">名古屋（環状道路）</div>
-            <div class="weather-info"><span class="weather-icon sun">●</span> 晴れ 23℃ <span class="weather-work ok">作業可</span></div>
-          </div>
-          <div class="weather-item">
-            <div class="weather-location">福岡（天神）</div>
-            <div class="weather-info"><span class="weather-icon cloud">●</span> 曇り 21℃ <span class="weather-work ok">作業可</span></div>
+    <!-- Row 1: お知らせ + マイタスク + 予定 -->
+    <div class="portal-row top-row">
+      <!-- お知らせ -->
+      <section class="card card-announcements">
+        <div class="card-header">
+          <h2>お知らせ・掲示板</h2>
+          <div class="tab-group">
+            <button class="tab-btn active" data-tab="all">全社</button>
+            <button class="tab-btn" data-tab="dept">部門</button>
+            <button class="tab-btn" data-tab="system">システム</button>
           </div>
         </div>
-      </div>
-
-      <div class="alert-section">
-        <div class="alert-title">経営アラート</div>
-        <div class="alert-list">
-          <div class="alert-item danger">
-            <span class="alert-icon">!</span>
-            <div class="alert-body">
-              <div class="alert-message">【虎ノ門タワー新築工事】実行予算超過見込 +3.2%（資材価格高騰）</div>
-              <div class="alert-time">2時間前</div>
-            </div>
-          </div>
-          <div class="alert-item warning">
-            <span class="alert-icon">!</span>
-            <div class="alert-body">
-              <div class="alert-message">【横浜MM地区再開発】工程遅延 5日（杭工事の地中障害対応）</div>
-              <div class="alert-time">5時間前</div>
-            </div>
-          </div>
-          <div class="alert-item warning">
-            <span class="alert-icon">!</span>
-            <div class="alert-body">
-              <div class="alert-message">【土木事業部】4月受注高が計画比 82% — 下期案件の前倒し検討推奨</div>
-              <div class="alert-time">本日</div>
-            </div>
-          </div>
-          <div class="alert-item info">
-            <span class="alert-icon">i</span>
-            <div class="alert-body">
-              <div class="alert-message">【品川駅前再開発】竣工引渡し完了 — 売上計上済み ¥186億</div>
-              <div class="alert-time">昨日</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== 2. プロジェクト管理 ===== -->
-    <section class="section" id="section-projects">
-      <div class="section-header">
-        <h2>プロジェクト管理</h2>
-        <span class="section-period">進行中プロジェクト</span>
-      </div>
-
-      <div class="kpi-grid">
-        <div class="kpi-card">
-          <div class="kpi-label">進行中</div>
-          <div class="kpi-value" data-target="47">0</div>
-          <div class="kpi-unit">件</div>
-          <div class="kpi-change neutral">全プロジェクト</div>
-        </div>
-        <div class="kpi-card accent-green">
-          <div class="kpi-label">順調</div>
-          <div class="kpi-value" data-target="38">0</div>
-          <div class="kpi-unit">件</div>
-          <div class="kpi-change positive">80.9%</div>
-        </div>
-        <div class="kpi-card accent-yellow">
-          <div class="kpi-label">注意</div>
-          <div class="kpi-value" data-target="6">0</div>
-          <div class="kpi-unit">件</div>
-          <div class="kpi-change warning">12.8%</div>
-        </div>
-        <div class="kpi-card accent-red">
-          <div class="kpi-label">遅延</div>
-          <div class="kpi-value" data-target="3">0</div>
-          <div class="kpi-unit">件</div>
-          <div class="kpi-change negative">6.4%</div>
-        </div>
-      </div>
-
-      <div class="chart-row">
-        <div class="chart-card">
-          <div class="chart-title">プロジェクト状況</div>
-          <canvas id="chart-project-status"></canvas>
-        </div>
-        <div class="chart-card wide">
-          <div class="chart-title">主要プロジェクト 工程進捗</div>
-          <canvas id="chart-project-progress"></canvas>
-        </div>
-      </div>
-
-      <div class="table-card">
-        <div class="table-title">重点プロジェクト一覧</div>
-        <div class="table-wrapper">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>プロジェクト名</th>
-                <th>種別</th>
-                <th>担当所長</th>
-                <th>契約金額</th>
-                <th>進捗率</th>
-                <th>粗利率</th>
-                <th>竣工予定</th>
-                <th>状況</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="project-name">虎ノ門タワー新築工事</td>
-                <td><span class="badge badge-blue">建築</span></td>
-                <td>佐藤 健一</td>
-                <td class="text-right">¥428億</td>
-                <td>
-                  <div class="progress-cell">
-                    <div class="progress-bar"><div class="progress-fill" style="width:62%"></div></div>
-                    <span>62%</span>
-                  </div>
-                </td>
-                <td class="text-right">6.8%</td>
-                <td>2027/09</td>
-                <td><span class="status-tag status-warning">注意</span></td>
-              </tr>
-              <tr>
-                <td class="project-name">横浜MM地区再開発</td>
-                <td><span class="badge badge-blue">建築</span></td>
-                <td>鈴木 大輔</td>
-                <td class="text-right">¥312億</td>
-                <td>
-                  <div class="progress-cell">
-                    <div class="progress-bar"><div class="progress-fill" style="width:45%"></div></div>
-                    <span>45%</span>
-                  </div>
-                </td>
-                <td class="text-right">7.2%</td>
-                <td>2028/03</td>
-                <td><span class="status-tag status-warning">注意</span></td>
-              </tr>
-              <tr>
-                <td class="project-name">首都高速 大規模更新工事</td>
-                <td><span class="badge badge-green">土木</span></td>
-                <td>高橋 正和</td>
-                <td class="text-right">¥287億</td>
-                <td>
-                  <div class="progress-cell">
-                    <div class="progress-bar"><div class="progress-fill" style="width:78%"></div></div>
-                    <span>78%</span>
-                  </div>
-                </td>
-                <td class="text-right">8.1%</td>
-                <td>2026/12</td>
-                <td><span class="status-tag status-ok">順調</span></td>
-              </tr>
-              <tr>
-                <td class="project-name">新宿南口駅ビル建替</td>
-                <td><span class="badge badge-blue">建築</span></td>
-                <td>渡辺 隆</td>
-                <td class="text-right">¥256億</td>
-                <td>
-                  <div class="progress-cell">
-                    <div class="progress-bar"><div class="progress-fill danger" style="width:33%"></div></div>
-                    <span>33%</span>
-                  </div>
-                </td>
-                <td class="text-right">5.9%</td>
-                <td>2028/06</td>
-                <td><span class="status-tag status-danger">遅延</span></td>
-              </tr>
-              <tr>
-                <td class="project-name">東京湾岸トンネル工事</td>
-                <td><span class="badge badge-green">土木</span></td>
-                <td>伊藤 雅之</td>
-                <td class="text-right">¥198億</td>
-                <td>
-                  <div class="progress-cell">
-                    <div class="progress-bar"><div class="progress-fill" style="width:91%"></div></div>
-                    <span>91%</span>
-                  </div>
-                </td>
-                <td class="text-right">9.3%</td>
-                <td>2026/06</td>
-                <td><span class="status-tag status-ok">順調</span></td>
-              </tr>
-              <tr>
-                <td class="project-name">大阪梅田複合施設</td>
-                <td><span class="badge badge-blue">建築</span></td>
-                <td>中村 太一</td>
-                <td class="text-right">¥175億</td>
-                <td>
-                  <div class="progress-cell">
-                    <div class="progress-bar"><div class="progress-fill" style="width:55%"></div></div>
-                    <span>55%</span>
-                  </div>
-                </td>
-                <td class="text-right">7.5%</td>
-                <td>2027/03</td>
-                <td><span class="status-tag status-ok">順調</span></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== 3. 安全・品質管理 ===== -->
-    <section class="section" id="section-safety">
-      <div class="section-header">
-        <h2>安全・品質管理</h2>
-        <span class="section-period">2026年度 累計</span>
-      </div>
-
-      <div class="kpi-grid">
-        <div class="kpi-card">
-          <div class="kpi-label">度数率</div>
-          <div class="kpi-value kpi-decimal" data-target="0.42" data-decimals="2">0</div>
-          <div class="kpi-unit">件/百万時間</div>
-          <div class="kpi-change positive">-0.08 前年比</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">強度率</div>
-          <div class="kpi-value kpi-decimal" data-target="0.05" data-decimals="2">0</div>
-          <div class="kpi-unit">日/千時間</div>
-          <div class="kpi-change positive">-0.02 前年比</div>
-        </div>
-        <div class="kpi-card accent-green">
-          <div class="kpi-label">無災害継続日数</div>
-          <div class="kpi-value" data-target="127">0</div>
-          <div class="kpi-unit">日</div>
-          <div class="kpi-change positive">継続中</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">パトロール実施率</div>
-          <div class="kpi-value" data-target="94">0</div>
-          <div class="kpi-unit">%</div>
-          <div class="kpi-change positive">目標: 90%</div>
-        </div>
-      </div>
-
-      <div class="chart-row">
-        <div class="chart-card wide">
-          <div class="chart-title">災害発生件数 月次推移</div>
-          <canvas id="chart-incidents"></canvas>
-        </div>
-        <div class="chart-card">
-          <div class="chart-title">品質検査 合格率</div>
-          <canvas id="chart-quality"></canvas>
-        </div>
-      </div>
-
-      <div class="table-card">
-        <div class="table-title">安全パトロール 直近指摘事項</div>
-        <div class="table-wrapper">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>日付</th>
-                <th>現場名</th>
-                <th>指摘区分</th>
-                <th>指摘内容</th>
-                <th>対応状況</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>04/08</td>
-                <td>虎ノ門タワー新築工事</td>
-                <td><span class="status-tag status-danger">重大</span></td>
-                <td>高所作業時の安全帯未使用（2名）</td>
-                <td><span class="status-tag status-ok">是正済</span></td>
-              </tr>
-              <tr>
-                <td>04/07</td>
-                <td>新宿南口駅ビル建替</td>
-                <td><span class="status-tag status-warning">軽微</span></td>
-                <td>通路上の資材仮置き（動線確保不十分）</td>
-                <td><span class="status-tag status-ok">是正済</span></td>
-              </tr>
-              <tr>
-                <td>04/05</td>
-                <td>横浜MM地区再開発</td>
-                <td><span class="status-tag status-warning">軽微</span></td>
-                <td>KYボード記載の日付誤り</td>
-                <td><span class="status-tag status-ok">是正済</span></td>
-              </tr>
-              <tr>
-                <td>04/03</td>
-                <td>大阪梅田複合施設</td>
-                <td><span class="status-tag status-warning">軽微</span></td>
-                <td>足場の手すり一部欠損</td>
-                <td><span class="status-tag status-pending">対応中</span></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== 4. 人員・リソース管理 ===== -->
-    <section class="section" id="section-personnel">
-      <div class="section-header">
-        <h2>人員・リソース管理</h2>
-        <span class="section-period">2026年4月時点</span>
-      </div>
-
-      <div class="kpi-grid">
-        <div class="kpi-card">
-          <div class="kpi-label">技術者数</div>
-          <div class="kpi-value" data-target="1247">0</div>
-          <div class="kpi-unit">名</div>
-          <div class="kpi-change positive">+32 前年比</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">現場配置率</div>
-          <div class="kpi-value" data-target="89">0</div>
-          <div class="kpi-unit">%</div>
-          <div class="kpi-change neutral">適正範囲</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">資格保有率</div>
-          <div class="kpi-value" data-target="76">0</div>
-          <div class="kpi-unit">%</div>
-          <div class="kpi-change positive">+4.2% 前年比</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">平均残業時間</div>
-          <div class="kpi-value kpi-decimal" data-target="28.5" data-decimals="1">0</div>
-          <div class="kpi-unit">時間/月</div>
-          <div class="kpi-change negative">目標: 25h以下</div>
-        </div>
-      </div>
-
-      <div class="chart-row">
-        <div class="chart-card wide">
-          <div class="chart-title">部門別 人員配置</div>
-          <canvas id="chart-staff-allocation"></canvas>
-        </div>
-        <div class="chart-card">
-          <div class="chart-title">部門別 月平均残業時間</div>
-          <canvas id="chart-overtime"></canvas>
-        </div>
-      </div>
-
-      <div class="table-card">
-        <div class="table-title">資格者配置状況</div>
-        <div class="table-wrapper">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>資格種別</th>
-                <th>保有者数</th>
-                <th>配置済</th>
-                <th>待機中</th>
-                <th>充足率</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1級建築施工管理技士</td>
-                <td class="text-right">312</td>
-                <td class="text-right">287</td>
-                <td class="text-right">25</td>
-                <td><span class="status-tag status-ok">92%</span></td>
-              </tr>
-              <tr>
-                <td>1級土木施工管理技士</td>
-                <td class="text-right">198</td>
-                <td class="text-right">185</td>
-                <td class="text-right">13</td>
-                <td><span class="status-tag status-ok">93%</span></td>
-              </tr>
-              <tr>
-                <td>監理技術者</td>
-                <td class="text-right">156</td>
-                <td class="text-right">148</td>
-                <td class="text-right">8</td>
-                <td><span class="status-tag status-warning">95%</span></td>
-              </tr>
-              <tr>
-                <td>一級建築士</td>
-                <td class="text-right">87</td>
-                <td class="text-right">79</td>
-                <td class="text-right">8</td>
-                <td><span class="status-tag status-ok">91%</span></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== 5. 財務・資金管理 ===== -->
-    <section class="section" id="section-finance">
-      <div class="section-header">
-        <h2>財務・資金管理</h2>
-        <span class="section-period">2026年度 第1四半期</span>
-      </div>
-
-      <div class="kpi-grid">
-        <div class="kpi-card">
-          <div class="kpi-label">営業キャッシュフロー</div>
-          <div class="kpi-value" data-target="312">0</div>
-          <div class="kpi-unit">億円</div>
-          <div class="kpi-change positive">+12.4% 前年比</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">フリーキャッシュフロー</div>
-          <div class="kpi-value" data-target="187">0</div>
-          <div class="kpi-unit">億円</div>
-          <div class="kpi-change positive">+8.7% 前年比</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">自己資本比率</div>
-          <div class="kpi-value kpi-decimal" data-target="38.2" data-decimals="1">0</div>
-          <div class="kpi-unit">%</div>
-          <div class="kpi-change positive">+1.3pt 前年比</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">流動比率</div>
-          <div class="kpi-value" data-target="142">0</div>
-          <div class="kpi-unit">%</div>
-          <div class="kpi-change positive">健全水準</div>
-        </div>
-      </div>
-
-      <div class="chart-row">
-        <div class="chart-card wide">
-          <div class="chart-title">月次キャッシュフロー推移</div>
-          <canvas id="chart-cashflow"></canvas>
-        </div>
-        <div class="chart-card">
-          <div class="chart-title">債権回収状況（残高年齢別）</div>
-          <canvas id="chart-receivables"></canvas>
-        </div>
-      </div>
-
-      <div class="chart-row">
-        <div class="chart-card wide">
-          <div class="chart-title">部門別損益</div>
-          <canvas id="chart-dept-pnl"></canvas>
-        </div>
-        <div class="chart-card">
-          <div class="chart-title">外注費・資材費 推移</div>
-          <canvas id="chart-cost-trend"></canvas>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== 6. 営業・受注管理 ===== -->
-    <section class="section" id="section-sales">
-      <div class="section-header">
-        <h2>営業・受注管理</h2>
-        <span class="section-period">2026年度</span>
-      </div>
-
-      <div class="kpi-grid">
-        <div class="kpi-card">
-          <div class="kpi-label">商談中</div>
-          <div class="kpi-value" data-target="1890">0</div>
-          <div class="kpi-unit">億円</div>
-          <div class="kpi-change neutral">42件</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">見積提出</div>
-          <div class="kpi-value" data-target="2340">0</div>
-          <div class="kpi-unit">億円</div>
-          <div class="kpi-change neutral">28件</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">受注見込</div>
-          <div class="kpi-value" data-target="890">0</div>
-          <div class="kpi-unit">億円</div>
-          <div class="kpi-change positive">確度A: 15件</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">今期受注実績</div>
-          <div class="kpi-value" data-target="456">0</div>
-          <div class="kpi-unit">億円</div>
-          <div class="kpi-change warning">計画比 82%</div>
-        </div>
-      </div>
-
-      <div class="chart-row">
-        <div class="chart-card">
-          <div class="chart-title">案件パイプライン</div>
-          <canvas id="chart-pipeline"></canvas>
-        </div>
-        <div class="chart-card wide">
-          <div class="chart-title">月次 受注実績推移</div>
-          <canvas id="chart-order-trend"></canvas>
-        </div>
-      </div>
-
-      <div class="table-card">
-        <div class="table-title">注目案件（受注確度A）</div>
-        <div class="table-wrapper">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>案件名</th>
-                <th>発注者</th>
-                <th>種別</th>
-                <th>概算金額</th>
-                <th>受注確度</th>
-                <th>決定予定</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="project-name">渋谷区庁舎建替計画</td>
-                <td>渋谷区</td>
-                <td><span class="badge badge-blue">建築</span></td>
-                <td class="text-right">¥156億</td>
-                <td><span class="status-tag status-ok">A</span></td>
-                <td>2026/05</td>
-              </tr>
-              <tr>
-                <td class="project-name">名古屋環状道路改修</td>
-                <td>中日本高速道路</td>
-                <td><span class="badge badge-green">土木</span></td>
-                <td class="text-right">¥98億</td>
-                <td><span class="status-tag status-ok">A</span></td>
-                <td>2026/06</td>
-              </tr>
-              <tr>
-                <td class="project-name">福岡天神再開発ビル</td>
-                <td>西日本鉄道</td>
-                <td><span class="badge badge-blue">建築</span></td>
-                <td class="text-right">¥87億</td>
-                <td><span class="status-tag status-ok">A</span></td>
-                <td>2026/05</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== 7. 環境・ESG ===== -->
-    <section class="section" id="section-environment">
-      <div class="section-header">
-        <h2>環境・サステナビリティ</h2>
-        <span class="section-period">2026年度 累計</span>
-      </div>
-
-      <div class="kpi-grid">
-        <div class="kpi-card">
-          <div class="kpi-label">CO2排出量</div>
-          <div class="kpi-value kpi-decimal" data-target="12.4" data-decimals="1">0</div>
-          <div class="kpi-unit">万t-CO2</div>
-          <div class="kpi-change positive">-8.2% 前年比</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">リサイクル率</div>
-          <div class="kpi-value kpi-decimal" data-target="96.3" data-decimals="1">0</div>
-          <div class="kpi-unit">%</div>
-          <div class="kpi-change positive">目標: 95%</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">グリーン調達率</div>
-          <div class="kpi-value" data-target="72">0</div>
-          <div class="kpi-unit">%</div>
-          <div class="kpi-change warning">目標: 80%</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">再エネ利用率</div>
-          <div class="kpi-value" data-target="34">0</div>
-          <div class="kpi-unit">%</div>
-          <div class="kpi-change positive">+11pt 前年比</div>
-        </div>
-      </div>
-
-      <div class="chart-row">
-        <div class="chart-card wide">
-          <div class="chart-title">CO2排出量 月次推移</div>
-          <canvas id="chart-co2"></canvas>
-        </div>
-        <div class="chart-card">
-          <div class="chart-title">廃棄物内訳</div>
-          <canvas id="chart-waste"></canvas>
-        </div>
-      </div>
-
-      <div class="chart-row single">
-        <div class="chart-card full">
-          <div class="chart-title">ESG目標 達成状況</div>
-          <div class="esg-progress-list">
-            <div class="esg-item">
-              <div class="esg-label">CO2排出削減（2030年 50%減）</div>
-              <div class="esg-bar-wrap">
-                <div class="esg-bar"><div class="esg-bar-fill" style="width:52%"></div></div>
-                <span class="esg-pct">52%</span>
+        <div class="card-body">
+          <div class="announce-list">
+            <div class="announce-item">
+              <span class="announce-tag tag-important">重要</span>
+              <div class="announce-content">
+                <a href="#">2026年度 安全衛生大会の開催について（6/15 本社ホール）</a>
+                <span class="announce-meta">総務部 - 04/08</span>
               </div>
             </div>
-            <div class="esg-item">
-              <div class="esg-label">リサイクル率（目標 95%以上）</div>
-              <div class="esg-bar-wrap">
-                <div class="esg-bar"><div class="esg-bar-fill green" style="width:96.3%"></div></div>
-                <span class="esg-pct">96.3%</span>
+            <div class="announce-item">
+              <span class="announce-tag tag-important">重要</span>
+              <div class="announce-content">
+                <a href="#">社長メッセージ：中期経営計画「Vision 2030」進捗について</a>
+                <span class="announce-meta">経営企画部 - 04/07</span>
               </div>
             </div>
-            <div class="esg-item">
-              <div class="esg-label">グリーン調達率（目標 80%）</div>
-              <div class="esg-bar-wrap">
-                <div class="esg-bar"><div class="esg-bar-fill yellow" style="width:72%"></div></div>
-                <span class="esg-pct">72%</span>
+            <div class="announce-item">
+              <span class="announce-tag tag-info">通知</span>
+              <div class="announce-content">
+                <a href="#">品川駅前再開発プロジェクト 竣工引渡し完了のお知らせ</a>
+                <span class="announce-meta">建築事業部 - 04/06</span>
               </div>
             </div>
-            <div class="esg-item">
-              <div class="esg-label">女性管理職比率（目標 15%）</div>
-              <div class="esg-bar-wrap">
-                <div class="esg-bar"><div class="esg-bar-fill yellow" style="width:73%"></div></div>
-                <span class="esg-pct">11%</span>
+            <div class="announce-item">
+              <span class="announce-tag tag-info">通知</span>
+              <div class="announce-content">
+                <a href="#">協力会社安全教育 4月実施分の報告書提出期限（4/15）</a>
+                <span class="announce-meta">安全管理部 - 04/05</span>
               </div>
             </div>
-            <div class="esg-item">
-              <div class="esg-label">有給取得率（目標 80%以上）</div>
-              <div class="esg-bar-wrap">
-                <div class="esg-bar"><div class="esg-bar-fill green" style="width:82%"></div></div>
-                <span class="esg-pct">82%</span>
+            <div class="announce-item">
+              <span class="announce-tag tag-system">保守</span>
+              <div class="announce-content">
+                <a href="#">基幹システム定期メンテナンス（4/13 22:00-翌6:00）</a>
+                <span class="announce-meta">情報システム部 - 04/04</span>
+              </div>
+            </div>
+            <div class="announce-item">
+              <span class="announce-tag tag-info">通知</span>
+              <div class="announce-content">
+                <a href="#">4月度 全社安全パトロール結果の公開</a>
+                <span class="announce-meta">安全管理部 - 04/03</span>
               </div>
             </div>
           </div>
         </div>
+      </section>
+
+      <!-- マイタスク + 予定 -->
+      <div class="side-col">
+        <section class="card card-tasks">
+          <div class="card-header">
+            <h2>マイタスク</h2>
+            <span class="count-badge">3</span>
+          </div>
+          <div class="card-body">
+            <div class="task-item">
+              <span class="task-type type-approve">承認</span>
+              <div class="task-content">
+                <div class="task-title">出張申請（大阪梅田現場視察）</div>
+                <div class="task-from">鈴木 大輔 - 建築事業部</div>
+              </div>
+            </div>
+            <div class="task-item">
+              <span class="task-type type-approve">承認</span>
+              <div class="task-content">
+                <div class="task-title">購買稟議：鉄骨資材 ¥2.4億</div>
+                <div class="task-from">高橋 正和 - 調達部</div>
+              </div>
+            </div>
+            <div class="task-item">
+              <span class="task-type type-review">確認</span>
+              <div class="task-content">
+                <div class="task-title">虎ノ門タワー 月次安全計画書</div>
+                <div class="task-from">佐藤 健一 - 安全管理部</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card card-schedule">
+          <div class="card-header">
+            <h2>本日の予定</h2>
+            <span class="schedule-date" id="todayDate"></span>
+          </div>
+          <div class="card-body">
+            <div class="schedule-item">
+              <span class="schedule-time">09:00</span>
+              <div class="schedule-bar bar-blue"></div>
+              <span class="schedule-text">朝礼・全体連絡</span>
+            </div>
+            <div class="schedule-item">
+              <span class="schedule-time">10:00</span>
+              <div class="schedule-bar bar-red"></div>
+              <span class="schedule-text">経営会議（役員会議室）</span>
+            </div>
+            <div class="schedule-item">
+              <span class="schedule-time">13:30</span>
+              <div class="schedule-bar bar-green"></div>
+              <span class="schedule-text">虎ノ門タワー現場巡回</span>
+            </div>
+            <div class="schedule-item">
+              <span class="schedule-time">16:00</span>
+              <div class="schedule-bar bar-yellow"></div>
+              <span class="schedule-text">協力会社 定例打合せ</span>
+            </div>
+            <div class="schedule-item">
+              <span class="schedule-time">17:30</span>
+              <div class="schedule-bar bar-blue"></div>
+              <span class="schedule-text">DX推進委員会</span>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- Row 2: 業務アプリケーション -->
+    <section class="card card-apps">
+      <div class="card-header">
+        <h2>業務アプリケーション</h2>
+      </div>
+      <div class="card-body">
+        <div class="app-categories">
+          <!-- 業務管理 -->
+          <div class="app-category">
+            <h3>業務管理</h3>
+            <div class="app-grid">
+              <a href="#" class="app-item">
+                <div class="app-icon icon-blue"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+                <span>工事台帳</span>
+              </a>
+              <a href="#" class="app-item">
+                <div class="app-icon icon-blue"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+                <span>物件台帳</span>
+              </a>
+              <a href="#" class="app-item">
+                <div class="app-icon icon-blue"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+                <span>引合台帳</span>
+              </a>
+              <a href="#" class="app-item">
+                <div class="app-icon icon-blue"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div>
+                <span>施工一覧</span>
+              </a>
+              <a href="#" class="app-item">
+                <div class="app-icon icon-blue"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+                <span>工事検証</span>
+              </a>
+            </div>
+          </div>
+          <!-- 申請・ワークフロー -->
+          <div class="app-category">
+            <h3>申請・ワークフロー</h3>
+            <div class="app-grid">
+              <a href="#" class="app-item">
+                <div class="app-icon icon-green"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+                <span>ワークフロー</span>
+              </a>
+              <a href="#" class="app-item">
+                <div class="app-icon icon-green"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg></div>
+                <span>申請業務</span>
+              </a>
+              <a href="#" class="app-item">
+                <div class="app-icon icon-green"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+                <span>稟議・決裁</span>
+              </a>
+              <a href="#" class="app-item">
+                <div class="app-icon icon-green"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+                <span>経費精算</span>
+              </a>
+            </div>
+          </div>
+          <!-- 文書・マニュアル -->
+          <div class="app-category">
+            <h3>文書・マニュアル</h3>
+            <div class="app-grid">
+              <a href="#" class="app-item">
+                <div class="app-icon icon-purple"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+                <span>ISOマニュアル</span>
+              </a>
+              <a href="#" class="app-item">
+                <div class="app-icon icon-purple"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+                <span>G4マニュアル</span>
+              </a>
+              <a href="#" class="app-item">
+                <div class="app-icon icon-purple"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+                <span>設計図書</span>
+              </a>
+              <a href="#" class="app-item">
+                <div class="app-icon icon-purple"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg></div>
+                <span>事前計画書</span>
+              </a>
+              <a href="#" class="app-item">
+                <div class="app-icon icon-purple"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></div>
+                <span>議事録</span>
+              </a>
+            </div>
+          </div>
+          <!-- 人事・安全 -->
+          <div class="app-category">
+            <h3>人事・安全・総務</h3>
+            <div class="app-grid">
+              <a href="#" class="app-item">
+                <div class="app-icon icon-orange"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+                <span>社員名簿</span>
+              </a>
+              <a href="#" class="app-item">
+                <div class="app-icon icon-orange"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+                <span>安全衛生管理</span>
+              </a>
+              <a href="#" class="app-item">
+                <div class="app-icon icon-orange"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+                <span>入退場管理</span>
+              </a>
+              <a href="#" class="app-item">
+                <div class="app-icon icon-orange"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
+                <span>車両配車管理</span>
+              </a>
+              <a href="#" class="app-item">
+                <div class="app-icon icon-orange"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a4 4 0 0 0-8 0v2"/></svg></div>
+                <span>備品管理</span>
+              </a>
+            </div>
+          </div>
+          <!-- レポート・分析 -->
+          <div class="app-category">
+            <h3>レポート・分析</h3>
+            <div class="app-grid">
+              <a href="dashboard.html" class="app-item app-highlight">
+                <div class="app-icon icon-indigo"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div>
+                <span>全社ダッシュボード</span>
+              </a>
+              <a href="#" class="app-item">
+                <div class="app-icon icon-indigo"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+                <span>定期レポート</span>
+              </a>
+              <a href="#" class="app-item">
+                <div class="app-icon icon-indigo"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+                <span>VE一覧</span>
+              </a>
+              <a href="#" class="app-item">
+                <div class="app-icon icon-indigo"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg></div>
+                <span>原価分析</span>
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
+
+    <!-- Row 3: ダッシュボードプレビュー -->
+    <section class="card card-dashboard-preview">
+      <div class="card-header">
+        <h2>全社ダッシュボード（速報）</h2>
+        <a href="dashboard.html" class="link-more">詳細を見る &rarr;</a>
+      </div>
+      <div class="card-body">
+        <div class="mini-kpi-row">
+          <div class="mini-kpi">
+            <div class="mini-kpi-label">売上高</div>
+            <div class="mini-kpi-value">2,847<small>億円</small></div>
+            <div class="mini-kpi-change up">+5.2%</div>
+          </div>
+          <div class="mini-kpi">
+            <div class="mini-kpi-label">営業利益</div>
+            <div class="mini-kpi-value">198<small>億円</small></div>
+            <div class="mini-kpi-change up">+8.1%</div>
+          </div>
+          <div class="mini-kpi">
+            <div class="mini-kpi-label">受注残高</div>
+            <div class="mini-kpi-value">4,521<small>億円</small></div>
+            <div class="mini-kpi-change up">+3.7%</div>
+          </div>
+          <div class="mini-kpi">
+            <div class="mini-kpi-label">進行PJ</div>
+            <div class="mini-kpi-value">47<small>件</small></div>
+            <div class="mini-kpi-change neutral">順調 38 / 注意 6 / 遅延 3</div>
+          </div>
+          <div class="mini-kpi">
+            <div class="mini-kpi-label">度数率</div>
+            <div class="mini-kpi-value">0.42</div>
+            <div class="mini-kpi-change up">-0.08</div>
+          </div>
+          <div class="mini-kpi">
+            <div class="mini-kpi-label">無災害日数</div>
+            <div class="mini-kpi-value">127<small>日</small></div>
+            <div class="mini-kpi-change neutral">継続中</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="portal-footer">
+      <span>ABC建設株式会社 社内ポータル（デモ版）</span>
+      <span>Powered by DX推進部</span>
+    </footer>
   </main>
 
-  <script src="js/dashboard.js"></script>
+  <script src="js/portal.js"></script>
 </body>
 </html>
