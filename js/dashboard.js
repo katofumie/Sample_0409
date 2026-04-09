@@ -1,0 +1,808 @@
+/**
+ * 全社ダッシュボード - メインスクリプト
+ */
+(function () {
+  'use strict';
+
+  // ===== Chart.js グローバル設定 =====
+  Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP", sans-serif';
+  Chart.defaults.font.size = 12;
+  Chart.defaults.color = '#64748b';
+  Chart.defaults.plugins.legend.labels.usePointStyle = true;
+  Chart.defaults.plugins.legend.labels.pointStyleWidth = 8;
+  Chart.defaults.plugins.legend.labels.padding = 16;
+  Chart.defaults.responsive = true;
+  Chart.defaults.maintainAspectRatio = false;
+
+  const MONTHS = ['4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月', '1月', '2月', '3月'];
+  const COLORS = {
+    primary: '#3b82f6',
+    primaryLight: 'rgba(59, 130, 246, 0.1)',
+    success: '#10b981',
+    successLight: 'rgba(16, 185, 129, 0.1)',
+    warning: '#f59e0b',
+    warningLight: 'rgba(245, 158, 11, 0.1)',
+    danger: '#ef4444',
+    dangerLight: 'rgba(239, 68, 68, 0.1)',
+    info: '#6366f1',
+    gray: '#94a3b8',
+    grayLight: 'rgba(148, 163, 184, 0.1)',
+  };
+
+  // Chart instances store
+  const charts = {};
+
+  // ===== Navigation =====
+  function initNavigation() {
+    const navItems = document.querySelectorAll('.nav-item');
+    const sections = document.querySelectorAll('.section');
+
+    navItems.forEach(function (item) {
+      item.addEventListener('click', function (e) {
+        e.preventDefault();
+        var sectionId = this.getAttribute('data-section');
+
+        navItems.forEach(function (n) { n.classList.remove('active'); });
+        this.classList.add('active');
+
+        sections.forEach(function (s) { s.classList.remove('active'); });
+        var target = document.getElementById('section-' + sectionId);
+        if (target) {
+          target.classList.add('active');
+          animateKPIs(target);
+          initSectionCharts(sectionId);
+        }
+
+        // Close mobile sidebar
+        document.getElementById('sidebar').classList.remove('open');
+        var overlay = document.querySelector('.sidebar-overlay');
+        if (overlay) overlay.classList.remove('active');
+      }.bind(item));
+    });
+  }
+
+  // ===== Sidebar Toggle (Mobile) =====
+  function initSidebarToggle() {
+    var toggle = document.getElementById('sidebarToggle');
+    var sidebar = document.getElementById('sidebar');
+
+    // Create overlay
+    var overlay = document.createElement('div');
+    overlay.className = 'sidebar-overlay';
+    document.body.appendChild(overlay);
+
+    toggle.addEventListener('click', function () {
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('active');
+    });
+
+    overlay.addEventListener('click', function () {
+      sidebar.classList.remove('open');
+      overlay.classList.remove('active');
+    });
+  }
+
+  // ===== KPI Number Animation =====
+  function animateKPIs(container) {
+    var kpiValues = container.querySelectorAll('.kpi-value');
+    kpiValues.forEach(function (el) {
+      var target = parseFloat(el.getAttribute('data-target'));
+      var decimals = parseInt(el.getAttribute('data-decimals')) || 0;
+      var duration = 800;
+      var start = performance.now();
+
+      function update(now) {
+        var elapsed = now - start;
+        var progress = Math.min(elapsed / duration, 1);
+        // ease out cubic
+        var eased = 1 - Math.pow(1 - progress, 3);
+        var current = target * eased;
+
+        if (decimals > 0) {
+          el.textContent = current.toFixed(decimals);
+        } else {
+          el.textContent = Math.round(current).toLocaleString();
+        }
+
+        if (progress < 1) {
+          requestAnimationFrame(update);
+        } else {
+          if (decimals > 0) {
+            el.textContent = target.toFixed(decimals);
+          } else {
+            el.textContent = target.toLocaleString();
+          }
+        }
+      }
+
+      requestAnimationFrame(update);
+    });
+  }
+
+  // ===== Header Date =====
+  function setHeaderDate() {
+    var now = new Date();
+    var opts = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'short' };
+    document.getElementById('headerDate').textContent = now.toLocaleDateString('ja-JP', opts);
+    var hours = String(now.getHours()).padStart(2, '0');
+    var mins = String(now.getMinutes()).padStart(2, '0');
+    document.getElementById('lastUpdate').textContent = hours + ':' + mins;
+  }
+
+  // ===== Chart Helpers =====
+  function createChart(canvasId, config) {
+    var canvas = document.getElementById(canvasId);
+    if (!canvas) return null;
+
+    // Destroy existing
+    if (charts[canvasId]) {
+      charts[canvasId].destroy();
+    }
+
+    // Set canvas container height
+    var parent = canvas.parentElement;
+    if (!canvas.closest('.chart-card').querySelector('.esg-progress-list')) {
+      canvas.style.height = '280px';
+    }
+
+    charts[canvasId] = new Chart(canvas, config);
+    return charts[canvasId];
+  }
+
+  // ===== Section Chart Initializers =====
+  var chartInitialized = {};
+
+  function initSectionCharts(sectionId) {
+    if (chartInitialized[sectionId]) return;
+    chartInitialized[sectionId] = true;
+
+    var initializers = {
+      executive: initExecutiveCharts,
+      projects: initProjectCharts,
+      safety: initSafetyCharts,
+      personnel: initPersonnelCharts,
+      finance: initFinanceCharts,
+      sales: initSalesCharts,
+      environment: initEnvironmentCharts,
+    };
+
+    if (initializers[sectionId]) {
+      initializers[sectionId]();
+    }
+  }
+
+  // ----- 1. 経営サマリー -----
+  function initExecutiveCharts() {
+    // 受注高・完工高 月次推移
+    createChart('chart-revenue-trend', {
+      type: 'bar',
+      data: {
+        labels: MONTHS,
+        datasets: [
+          {
+            label: '受注高',
+            data: [280, 310, 245, 390, 275, 320, 410, 290, 350, 265, 300, 412],
+            backgroundColor: COLORS.primary,
+            borderRadius: 4,
+            barPercentage: 0.7,
+            categoryPercentage: 0.7,
+          },
+          {
+            label: '完工高',
+            data: [220, 195, 240, 210, 235, 280, 250, 310, 270, 225, 290, 309],
+            backgroundColor: COLORS.success,
+            borderRadius: 4,
+            barPercentage: 0.7,
+            categoryPercentage: 0.7,
+          },
+          {
+            label: '受注高（前年）',
+            type: 'line',
+            data: [260, 280, 230, 350, 250, 300, 380, 270, 320, 245, 280, 382],
+            borderColor: COLORS.gray,
+            borderDash: [5, 5],
+            pointRadius: 0,
+            tension: 0.3,
+            borderWidth: 2,
+          },
+        ],
+      },
+      options: {
+        plugins: {
+          legend: { position: 'top' },
+          tooltip: {
+            callbacks: {
+              label: function (ctx) { return ctx.dataset.label + ': ' + ctx.parsed.y + '億円'; },
+            },
+          },
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: { callback: function (v) { return v + '億'; } },
+            grid: { color: 'rgba(0,0,0,0.04)' },
+          },
+          x: { grid: { display: false } },
+        },
+      },
+    });
+
+    // 部門別売上構成
+    createChart('chart-department', {
+      type: 'doughnut',
+      data: {
+        labels: ['建築事業', '土木事業', '設計事業', '不動産事業', 'その他'],
+        datasets: [{
+          data: [45, 30, 10, 8, 7],
+          backgroundColor: [COLORS.primary, COLORS.success, COLORS.warning, COLORS.info, COLORS.gray],
+          borderWidth: 0,
+          spacing: 2,
+        }],
+      },
+      options: {
+        cutout: '65%',
+        plugins: {
+          legend: { position: 'bottom' },
+          tooltip: {
+            callbacks: {
+              label: function (ctx) { return ctx.label + ': ' + ctx.parsed + '%'; },
+            },
+          },
+        },
+      },
+    });
+  }
+
+  // ----- 2. プロジェクト管理 -----
+  function initProjectCharts() {
+    // プロジェクト状況
+    createChart('chart-project-status', {
+      type: 'doughnut',
+      data: {
+        labels: ['順調', '注意', '遅延'],
+        datasets: [{
+          data: [38, 6, 3],
+          backgroundColor: [COLORS.success, COLORS.warning, COLORS.danger],
+          borderWidth: 0,
+          spacing: 2,
+        }],
+      },
+      options: {
+        cutout: '65%',
+        plugins: {
+          legend: { position: 'bottom' },
+        },
+      },
+    });
+
+    // 主要プロジェクト 工程進捗 (horizontal bar)
+    createChart('chart-project-progress', {
+      type: 'bar',
+      data: {
+        labels: ['虎ノ門タワー', '横浜MM再開発', '首都高速更新', '新宿南口駅ビル', '東京湾岸トンネル', '大阪梅田複合'],
+        datasets: [
+          {
+            label: '実績',
+            data: [62, 45, 78, 33, 91, 55],
+            backgroundColor: function (ctx) {
+              var v = ctx.parsed.x;
+              if (v < 40) return COLORS.danger;
+              if (v < 60) return COLORS.warning;
+              return COLORS.primary;
+            },
+            borderRadius: 4,
+            barPercentage: 0.6,
+          },
+          {
+            label: '計画',
+            data: [65, 50, 76, 45, 90, 54],
+            backgroundColor: 'rgba(148, 163, 184, 0.3)',
+            borderRadius: 4,
+            barPercentage: 0.6,
+          },
+        ],
+      },
+      options: {
+        indexAxis: 'y',
+        plugins: {
+          legend: { position: 'top' },
+          tooltip: {
+            callbacks: {
+              label: function (ctx) { return ctx.dataset.label + ': ' + ctx.parsed.x + '%'; },
+            },
+          },
+        },
+        scales: {
+          x: {
+            beginAtZero: true,
+            max: 100,
+            ticks: { callback: function (v) { return v + '%'; } },
+            grid: { color: 'rgba(0,0,0,0.04)' },
+          },
+          y: { grid: { display: false } },
+        },
+      },
+    });
+  }
+
+  // ----- 3. 安全・品質管理 -----
+  function initSafetyCharts() {
+    // 災害発生件数
+    createChart('chart-incidents', {
+      type: 'bar',
+      data: {
+        labels: MONTHS,
+        datasets: [
+          {
+            label: '不休災害',
+            data: [1, 0, 2, 1, 0, 1, 0, 1, 0, 0, 1, 0],
+            backgroundColor: COLORS.warning,
+            borderRadius: 4,
+          },
+          {
+            label: '休業災害',
+            data: [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+            backgroundColor: COLORS.danger,
+            borderRadius: 4,
+          },
+          {
+            label: '度数率',
+            type: 'line',
+            data: [0.58, 0.55, 0.52, 0.54, 0.51, 0.49, 0.48, 0.47, 0.46, 0.45, 0.43, 0.42],
+            borderColor: COLORS.primary,
+            yAxisID: 'y1',
+            tension: 0.3,
+            pointRadius: 3,
+            borderWidth: 2,
+          },
+        ],
+      },
+      options: {
+        plugins: { legend: { position: 'top' } },
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: { display: true, text: '件数' },
+            grid: { color: 'rgba(0,0,0,0.04)' },
+          },
+          y1: {
+            position: 'right',
+            beginAtZero: true,
+            title: { display: true, text: '度数率' },
+            grid: { display: false },
+          },
+          x: { grid: { display: false } },
+        },
+      },
+    });
+
+    // 品質検査 合格率
+    createChart('chart-quality', {
+      type: 'radar',
+      data: {
+        labels: ['コンクリート', '鉄筋', '鉄骨', '防水', '仕上げ', '設備'],
+        datasets: [
+          {
+            label: '今期',
+            data: [98.2, 97.5, 99.1, 96.8, 97.3, 98.0],
+            borderColor: COLORS.primary,
+            backgroundColor: COLORS.primaryLight,
+            pointRadius: 4,
+            borderWidth: 2,
+          },
+          {
+            label: '前期',
+            data: [97.0, 96.8, 98.5, 95.2, 96.5, 97.1],
+            borderColor: COLORS.gray,
+            backgroundColor: COLORS.grayLight,
+            pointRadius: 4,
+            borderWidth: 2,
+            borderDash: [5, 5],
+          },
+        ],
+      },
+      options: {
+        scales: {
+          r: {
+            beginAtZero: false,
+            min: 92,
+            max: 100,
+            ticks: { callback: function (v) { return v + '%'; }, stepSize: 2 },
+          },
+        },
+        plugins: { legend: { position: 'bottom' } },
+      },
+    });
+  }
+
+  // ----- 4. 人員・リソース -----
+  function initPersonnelCharts() {
+    // 部門別 人員配置
+    createChart('chart-staff-allocation', {
+      type: 'bar',
+      data: {
+        labels: ['建築事業部', '土木事業部', '設計部', '営業部', '管理部門', '技術研究所'],
+        datasets: [
+          {
+            label: '現場配置',
+            data: [420, 310, 85, 0, 0, 0],
+            backgroundColor: COLORS.primary,
+            borderRadius: 4,
+          },
+          {
+            label: '内勤',
+            data: [68, 42, 65, 95, 112, 50],
+            backgroundColor: COLORS.info,
+            borderRadius: 4,
+          },
+        ],
+      },
+      options: {
+        plugins: { legend: { position: 'top' } },
+        scales: {
+          y: {
+            beginAtZero: true,
+            stacked: true,
+            ticks: { callback: function (v) { return v + '名'; } },
+            grid: { color: 'rgba(0,0,0,0.04)' },
+          },
+          x: { stacked: true, grid: { display: false } },
+        },
+      },
+    });
+
+    // 部門別 月平均残業時間
+    createChart('chart-overtime', {
+      type: 'bar',
+      data: {
+        labels: ['建築', '土木', '設計', '営業', '管理', '研究所'],
+        datasets: [{
+          label: '月平均残業時間',
+          data: [34.2, 31.5, 26.8, 22.3, 18.4, 24.1],
+          backgroundColor: function (ctx) {
+            var v = ctx.parsed.y;
+            if (v > 30) return COLORS.danger;
+            if (v > 25) return COLORS.warning;
+            return COLORS.success;
+          },
+          borderRadius: 4,
+        }],
+      },
+      options: {
+        plugins: {
+          legend: { display: false },
+          annotation: {},
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: { callback: function (v) { return v + 'h'; } },
+            grid: { color: 'rgba(0,0,0,0.04)' },
+          },
+          x: { grid: { display: false } },
+        },
+      },
+    });
+  }
+
+  // ----- 5. 財務・資金管理 -----
+  function initFinanceCharts() {
+    // 月次キャッシュフロー
+    createChart('chart-cashflow', {
+      type: 'bar',
+      data: {
+        labels: MONTHS,
+        datasets: [
+          {
+            label: '営業CF',
+            data: [32, 28, 41, 22, 35, 29, 38, 24, 31, 18, 25, 34],
+            backgroundColor: COLORS.primary,
+            borderRadius: 4,
+          },
+          {
+            label: '投資CF',
+            data: [-15, -12, -18, -10, -14, -8, -20, -11, -16, -9, -13, -17],
+            backgroundColor: COLORS.warning,
+            borderRadius: 4,
+          },
+          {
+            label: '累計FCF',
+            type: 'line',
+            data: [17, 33, 56, 68, 89, 110, 128, 141, 156, 165, 177, 194],
+            borderColor: COLORS.success,
+            tension: 0.3,
+            pointRadius: 3,
+            borderWidth: 2,
+          },
+        ],
+      },
+      options: {
+        plugins: { legend: { position: 'top' } },
+        scales: {
+          y: {
+            ticks: { callback: function (v) { return v + '億'; } },
+            grid: { color: 'rgba(0,0,0,0.04)' },
+          },
+          x: { grid: { display: false } },
+        },
+      },
+    });
+
+    // 債権回収状況
+    createChart('chart-receivables', {
+      type: 'doughnut',
+      data: {
+        labels: ['30日以内', '31-60日', '61-90日', '90日超'],
+        datasets: [{
+          data: [68, 18, 9, 5],
+          backgroundColor: [COLORS.success, COLORS.primary, COLORS.warning, COLORS.danger],
+          borderWidth: 0,
+          spacing: 2,
+        }],
+      },
+      options: {
+        cutout: '65%',
+        plugins: {
+          legend: { position: 'bottom' },
+          tooltip: {
+            callbacks: {
+              label: function (ctx) { return ctx.label + ': ' + ctx.parsed + '%'; },
+            },
+          },
+        },
+      },
+    });
+
+    // 部門別損益
+    createChart('chart-dept-pnl', {
+      type: 'bar',
+      data: {
+        labels: ['建築事業', '土木事業', '設計事業', '不動産事業'],
+        datasets: [
+          {
+            label: '売上高',
+            data: [1281, 854, 285, 228],
+            backgroundColor: COLORS.primary,
+            borderRadius: 4,
+            barPercentage: 0.6,
+          },
+          {
+            label: '営業利益',
+            data: [78, 62, 28, 30],
+            backgroundColor: COLORS.success,
+            borderRadius: 4,
+            barPercentage: 0.6,
+          },
+        ],
+      },
+      options: {
+        plugins: { legend: { position: 'top' } },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: { callback: function (v) { return v + '億'; } },
+            grid: { color: 'rgba(0,0,0,0.04)' },
+          },
+          x: { grid: { display: false } },
+        },
+      },
+    });
+
+    // 外注費・資材費 推移
+    createChart('chart-cost-trend', {
+      type: 'line',
+      data: {
+        labels: MONTHS,
+        datasets: [
+          {
+            label: '外注費',
+            data: [142, 138, 155, 148, 160, 165, 158, 170, 163, 155, 168, 172],
+            borderColor: COLORS.primary,
+            backgroundColor: COLORS.primaryLight,
+            fill: true,
+            tension: 0.3,
+            borderWidth: 2,
+          },
+          {
+            label: '資材費',
+            data: [88, 92, 95, 98, 101, 105, 103, 108, 110, 107, 112, 115],
+            borderColor: COLORS.warning,
+            backgroundColor: COLORS.warningLight,
+            fill: true,
+            tension: 0.3,
+            borderWidth: 2,
+          },
+        ],
+      },
+      options: {
+        plugins: { legend: { position: 'top' } },
+        scales: {
+          y: {
+            beginAtZero: false,
+            ticks: { callback: function (v) { return v + '億'; } },
+            grid: { color: 'rgba(0,0,0,0.04)' },
+          },
+          x: { grid: { display: false } },
+        },
+      },
+    });
+  }
+
+  // ----- 6. 営業・受注管理 -----
+  function initSalesCharts() {
+    // 案件パイプライン (horizontal funnel-like bar)
+    createChart('chart-pipeline', {
+      type: 'bar',
+      data: {
+        labels: ['情報収集', '提案中', '見積提出', '交渉中', '内定'],
+        datasets: [{
+          label: '金額（億円）',
+          data: [3200, 1890, 2340, 1150, 890],
+          backgroundColor: [
+            'rgba(99, 102, 241, 0.6)',
+            'rgba(59, 130, 246, 0.6)',
+            'rgba(16, 185, 129, 0.6)',
+            'rgba(245, 158, 11, 0.6)',
+            'rgba(239, 68, 68, 0.6)',
+          ],
+          borderRadius: 4,
+          barPercentage: 0.5,
+        }],
+      },
+      options: {
+        indexAxis: 'y',
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: function (ctx) { return ctx.parsed.x + '億円'; },
+            },
+          },
+        },
+        scales: {
+          x: {
+            beginAtZero: true,
+            ticks: { callback: function (v) { return v + '億'; } },
+            grid: { color: 'rgba(0,0,0,0.04)' },
+          },
+          y: { grid: { display: false } },
+        },
+      },
+    });
+
+    // 月次 受注実績推移
+    createChart('chart-order-trend', {
+      type: 'bar',
+      data: {
+        labels: MONTHS,
+        datasets: [
+          {
+            label: '受注実績',
+            data: [120, 85, 156, 92, 0, 0, 0, 0, 0, 0, 0, 0],
+            backgroundColor: COLORS.primary,
+            borderRadius: 4,
+          },
+          {
+            label: '受注計画',
+            type: 'line',
+            data: [130, 110, 140, 120, 150, 130, 160, 140, 170, 150, 140, 160],
+            borderColor: COLORS.gray,
+            borderDash: [5, 5],
+            pointRadius: 3,
+            tension: 0.3,
+            borderWidth: 2,
+          },
+          {
+            label: '累計実績',
+            type: 'line',
+            data: [120, 205, 361, 453, null, null, null, null, null, null, null, null],
+            borderColor: COLORS.success,
+            pointRadius: 4,
+            tension: 0.3,
+            borderWidth: 2,
+          },
+        ],
+      },
+      options: {
+        plugins: { legend: { position: 'top' } },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: { callback: function (v) { return v + '億'; } },
+            grid: { color: 'rgba(0,0,0,0.04)' },
+          },
+          x: { grid: { display: false } },
+        },
+      },
+    });
+  }
+
+  // ----- 7. 環境・ESG -----
+  function initEnvironmentCharts() {
+    // CO2排出量 月次推移
+    createChart('chart-co2', {
+      type: 'bar',
+      data: {
+        labels: MONTHS,
+        datasets: [
+          {
+            label: '今期',
+            data: [1.2, 1.1, 1.0, 0.9, 1.1, 1.2, 1.0, 0.9, 1.0, 1.1, 0.9, 1.0],
+            backgroundColor: COLORS.primary,
+            borderRadius: 4,
+          },
+          {
+            label: '前期',
+            data: [1.4, 1.3, 1.2, 1.1, 1.3, 1.4, 1.2, 1.1, 1.2, 1.3, 1.1, 1.2],
+            backgroundColor: 'rgba(148, 163, 184, 0.4)',
+            borderRadius: 4,
+          },
+        ],
+      },
+      options: {
+        plugins: { legend: { position: 'top' } },
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: { display: true, text: '万t-CO2' },
+            grid: { color: 'rgba(0,0,0,0.04)' },
+          },
+          x: { grid: { display: false } },
+        },
+      },
+    });
+
+    // 廃棄物内訳
+    createChart('chart-waste', {
+      type: 'doughnut',
+      data: {
+        labels: ['コンクリート', '金属くず', '木くず', '汚泥', '混合廃棄物', 'その他'],
+        datasets: [{
+          data: [35, 22, 15, 12, 10, 6],
+          backgroundColor: [
+            COLORS.primary,
+            COLORS.success,
+            COLORS.warning,
+            COLORS.info,
+            COLORS.danger,
+            COLORS.gray,
+          ],
+          borderWidth: 0,
+          spacing: 2,
+        }],
+      },
+      options: {
+        cutout: '65%',
+        plugins: {
+          legend: { position: 'bottom' },
+          tooltip: {
+            callbacks: {
+              label: function (ctx) { return ctx.label + ': ' + ctx.parsed + '%'; },
+            },
+          },
+        },
+      },
+    });
+  }
+
+  // ===== Initialize =====
+  function init() {
+    setHeaderDate();
+    initNavigation();
+    initSidebarToggle();
+
+    // Initialize first section
+    var activeSection = document.querySelector('.section.active');
+    if (activeSection) {
+      animateKPIs(activeSection);
+    }
+    initSectionCharts('executive');
+  }
+
+  // Wait for DOM
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
