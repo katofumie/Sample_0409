@@ -62,6 +62,11 @@ body {
   font-size: 1rem; font-weight: 700; color: var(--text);
 }
 
+.header-motto {
+  font-size: 0.7rem; color: var(--text-light);
+  letter-spacing: 0.08em;
+}
+
 .header-search {
   display: flex; align-items: center; gap: 6px;
   background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
