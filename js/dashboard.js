@@ -823,6 +823,7 @@
     initNavigation();
     initSidebarToggle();
     initNotification();
+    initDrilldown();
 
     // Initialize first section
     var activeSection = document.querySelector('.section.active');
@@ -830,6 +831,114 @@
       animateKPIs(activeSection);
     }
     initSectionCharts('executive');
+  }
+
+  // ===== Drilldown Modal =====
+  function initDrilldown() {
+    var kpiCard = document.getElementById('kpi-revenue');
+    var overlay = document.getElementById('modalOverlay');
+    var closeBtn = document.getElementById('modalClose');
+    if (!kpiCard || !overlay) return;
+
+    var drillChartCreated = false;
+
+    kpiCard.addEventListener('click', function () {
+      overlay.classList.add('open');
+      if (!drillChartCreated) {
+        drillChartCreated = true;
+        initDrilldownChart();
+      }
+    });
+
+    closeBtn.addEventListener('click', function () {
+      overlay.classList.remove('open');
+    });
+
+    overlay.addEventListener('click', function (e) {
+      if (e.target === overlay) overlay.classList.remove('open');
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') overlay.classList.remove('open');
+    });
+  }
+
+  function initDrilldownChart() {
+    var canvas = document.getElementById('chart-revenue-drill');
+    if (!canvas) return;
+
+    new Chart(canvas, {
+      type: 'bar',
+      data: {
+        labels: ['2022', '2023', '2024', '2025', '2026（見込）'],
+        datasets: [
+          {
+            label: '売上高（億円）',
+            data: [2398, 2512, 2601, 2706, 2847],
+            backgroundColor: [
+              'rgba(59, 130, 246, 0.5)',
+              'rgba(59, 130, 246, 0.5)',
+              'rgba(59, 130, 246, 0.5)',
+              'rgba(59, 130, 246, 0.5)',
+              'rgba(29, 78, 216, 0.8)',
+            ],
+            borderRadius: 6,
+            barPercentage: 0.55,
+            yAxisID: 'y',
+          },
+          {
+            label: '営業利益率（%）',
+            type: 'line',
+            data: [5.8, 6.1, 6.2, 6.8, 7.0],
+            borderColor: '#10b981',
+            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            fill: true,
+            tension: 0.3,
+            pointRadius: 5,
+            pointBackgroundColor: '#10b981',
+            borderWidth: 2.5,
+            yAxisID: 'y1',
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+          mode: 'index',
+          intersect: false,
+        },
+        plugins: {
+          legend: { position: 'top' },
+          tooltip: {
+            callbacks: {
+              label: function (ctx) {
+                if (ctx.datasetIndex === 0) return '売上高: ' + ctx.parsed.y.toLocaleString() + '億円';
+                return '営業利益率: ' + ctx.parsed.y + '%';
+              },
+            },
+          },
+        },
+        scales: {
+          y: {
+            beginAtZero: false,
+            min: 2000,
+            title: { display: true, text: '売上高（億円）' },
+            ticks: { callback: function (v) { return v.toLocaleString(); } },
+            grid: { color: 'rgba(0,0,0,0.04)' },
+          },
+          y1: {
+            position: 'right',
+            min: 4,
+            max: 9,
+            title: { display: true, text: '営業利益率（%）' },
+            ticks: { callback: function (v) { return v + '%'; } },
+            grid: { display: false },
+          },
+          x: { grid: { display: false } },
+        },
+      },
+    });
   }
 
   // Wait for DOM

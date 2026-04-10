@@ -136,8 +136,8 @@
       </div>
 
       <div class="kpi-grid">
-        <div class="kpi-card">
-          <div class="kpi-label">売上高</div>
+        <div class="kpi-card kpi-clickable" id="kpi-revenue">
+          <div class="kpi-label">売上高 <span class="kpi-drill-hint">&#9654; 詳細</span></div>
           <div class="kpi-value" data-target="2847">0</div>
           <div class="kpi-unit">億円</div>
           <div class="kpi-change positive">+5.2% 前年比</div>
@@ -815,6 +815,91 @@
       </div>
     </section>
   </main>
+
+  <!-- ===== Drill-down Modal ===== -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>売上高 年度推移（過去5年）</h2>
+        <button class="modal-close" id="modalClose">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-kpi-row">
+          <div class="modal-kpi">
+            <div class="modal-kpi-label">2026年度（見込）</div>
+            <div class="modal-kpi-value">2,847<small>億円</small></div>
+          </div>
+          <div class="modal-kpi">
+            <div class="modal-kpi-label">5年間 成長率</div>
+            <div class="modal-kpi-value up">+18.7<small>%</small></div>
+          </div>
+          <div class="modal-kpi">
+            <div class="modal-kpi-label">5年間 CAGR</div>
+            <div class="modal-kpi-value">3.5<small>%</small></div>
+          </div>
+        </div>
+        <div class="modal-chart-area">
+          <canvas id="chart-revenue-drill"></canvas>
+        </div>
+        <div class="modal-table-wrap">
+          <table class="modal-table">
+            <thead>
+              <tr>
+                <th>年度</th>
+                <th>売上高</th>
+                <th>前年比</th>
+                <th>営業利益</th>
+                <th>営業利益率</th>
+                <th>利益率増減</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>2022</td>
+                <td class="text-right">2,398億円</td>
+                <td class="text-right">-</td>
+                <td class="text-right">139億円</td>
+                <td class="text-right">5.8%</td>
+                <td class="text-right">-</td>
+              </tr>
+              <tr>
+                <td>2023</td>
+                <td class="text-right">2,512億円</td>
+                <td class="text-right positive">+4.8%</td>
+                <td class="text-right">153億円</td>
+                <td class="text-right">6.1%</td>
+                <td class="text-right positive">+0.3pt</td>
+              </tr>
+              <tr>
+                <td>2024</td>
+                <td class="text-right">2,601億円</td>
+                <td class="text-right positive">+3.5%</td>
+                <td class="text-right">162億円</td>
+                <td class="text-right">6.2%</td>
+                <td class="text-right positive">+0.1pt</td>
+              </tr>
+              <tr>
+                <td>2025</td>
+                <td class="text-right">2,706億円</td>
+                <td class="text-right positive">+4.0%</td>
+                <td class="text-right">183億円</td>
+                <td class="text-right">6.8%</td>
+                <td class="text-right positive">+0.6pt</td>
+              </tr>
+              <tr class="row-current">
+                <td><strong>2026（見込）</strong></td>
+                <td class="text-right"><strong>2,847億円</strong></td>
+                <td class="text-right positive"><strong>+5.2%</strong></td>
+                <td class="text-right"><strong>198億円</strong></td>
+                <td class="text-right"><strong>7.0%</strong></td>
+                <td class="text-right positive"><strong>+0.2pt</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script src="js/dashboard.js"></script>
 </body>
