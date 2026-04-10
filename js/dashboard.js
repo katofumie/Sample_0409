@@ -213,7 +213,7 @@
         datasets: [
           {
             label: '受注高',
-            data: [280, 310, 245, 390, 275, 320, 410, 290, 350, 265, 300, 412],
+            data: [78, 87, 69, 110, 77, 90, 115, 81, 98, 75, 84, 116],
             backgroundColor: COLORS.primary,
             borderRadius: 4,
             barPercentage: 0.7,
@@ -221,7 +221,7 @@
           },
           {
             label: '完工高',
-            data: [220, 195, 240, 210, 235, 280, 250, 310, 270, 225, 290, 309],
+            data: [62, 55, 67, 59, 66, 79, 70, 87, 76, 63, 81, 87],
             backgroundColor: COLORS.success,
             borderRadius: 4,
             barPercentage: 0.7,
@@ -230,7 +230,7 @@
           {
             label: '受注高（前年）',
             type: 'line',
-            data: [260, 280, 230, 350, 250, 300, 380, 270, 320, 245, 280, 382],
+            data: [73, 79, 65, 98, 70, 84, 107, 76, 90, 69, 79, 107],
             borderColor: COLORS.gray,
             borderDash: [5, 5],
             pointRadius: 0,
@@ -293,7 +293,7 @@
       data: {
         labels: ['順調', '注意', '遅延'],
         datasets: [{
-          data: [38, 6, 3],
+          data: [18, 3, 2],
           backgroundColor: [COLORS.success, COLORS.warning, COLORS.danger],
           borderWidth: 0,
           spacing: 2,
@@ -457,13 +457,13 @@
         datasets: [
           {
             label: '現場配置',
-            data: [420, 310, 85, 0, 0, 0],
+            data: [118, 87, 24, 0, 0, 0],
             backgroundColor: COLORS.primary,
             borderRadius: 4,
           },
           {
             label: '内勤',
-            data: [68, 42, 65, 95, 112, 50],
+            data: [19, 12, 18, 27, 31, 14],
             backgroundColor: COLORS.info,
             borderRadius: 4,
           },
@@ -527,20 +527,20 @@
         datasets: [
           {
             label: '営業CF',
-            data: [32, 28, 41, 22, 35, 29, 38, 24, 31, 18, 25, 34],
+            data: [9, 8, 12, 6, 10, 8, 11, 7, 9, 5, 7, 10],
             backgroundColor: COLORS.primary,
             borderRadius: 4,
           },
           {
             label: '投資CF',
-            data: [-15, -12, -18, -10, -14, -8, -20, -11, -16, -9, -13, -17],
+            data: [-4, -3, -5, -3, -4, -2, -6, -3, -5, -3, -4, -5],
             backgroundColor: COLORS.warning,
             borderRadius: 4,
           },
           {
             label: '累計FCF',
             type: 'line',
-            data: [17, 33, 56, 68, 89, 110, 128, 141, 156, 165, 177, 194],
+            data: [5, 10, 17, 20, 26, 32, 37, 41, 45, 47, 50, 55],
             borderColor: COLORS.success,
             tension: 0.3,
             pointRadius: 3,
@@ -593,14 +593,14 @@
         datasets: [
           {
             label: '売上高',
-            data: [1281, 854, 285, 228],
+            data: [360, 240, 80, 64],
             backgroundColor: COLORS.primary,
             borderRadius: 4,
             barPercentage: 0.6,
           },
           {
             label: '営業利益',
-            data: [78, 62, 28, 30],
+            data: [25, 17, 8, 8],
             backgroundColor: COLORS.success,
             borderRadius: 4,
             barPercentage: 0.6,
@@ -628,7 +628,7 @@
         datasets: [
           {
             label: '外注費',
-            data: [142, 138, 155, 148, 160, 165, 158, 170, 163, 155, 168, 172],
+            data: [40, 39, 44, 42, 45, 46, 44, 48, 46, 44, 47, 48],
             borderColor: COLORS.primary,
             backgroundColor: COLORS.primaryLight,
             fill: true,
@@ -637,7 +637,7 @@
           },
           {
             label: '資材費',
-            data: [88, 92, 95, 98, 101, 105, 103, 108, 110, 107, 112, 115],
+            data: [25, 26, 27, 28, 28, 30, 29, 30, 31, 30, 31, 32],
             borderColor: COLORS.warning,
             backgroundColor: COLORS.warningLight,
             fill: true,
@@ -669,7 +669,7 @@
         labels: ['情報収集', '提案中', '見積提出', '交渉中', '内定'],
         datasets: [{
           label: '金額（億円）',
-          data: [3200, 1890, 2340, 1150, 890],
+          data: [900, 530, 660, 320, 250],
           backgroundColor: [
             'rgba(99, 102, 241, 0.6)',
             'rgba(59, 130, 246, 0.6)',
@@ -710,14 +710,14 @@
         datasets: [
           {
             label: '受注実績',
-            data: [120, 85, 156, 92, 0, 0, 0, 0, 0, 0, 0, 0],
+            data: [34, 24, 44, 26, 0, 0, 0, 0, 0, 0, 0, 0],
             backgroundColor: COLORS.primary,
             borderRadius: 4,
           },
           {
             label: '受注計画',
             type: 'line',
-            data: [130, 110, 140, 120, 150, 130, 160, 140, 170, 150, 140, 160],
+            data: [37, 31, 39, 34, 42, 37, 45, 39, 48, 42, 39, 45],
             borderColor: COLORS.gray,
             borderDash: [5, 5],
             pointRadius: 3,
@@ -727,7 +727,7 @@
           {
             label: '累計実績',
             type: 'line',
-            data: [120, 205, 361, 453, null, null, null, null, null, null, null, null],
+            data: [34, 58, 102, 128, null, null, null, null, null, null, null, null],
             borderColor: COLORS.success,
             pointRadius: 4,
             tension: 0.3,
@@ -874,7 +874,7 @@
         datasets: [
           {
             label: '売上高（億円）',
-            data: [2398, 2512, 2601, 2706, 2847],
+            data: [674, 706, 731, 761, 800],
             backgroundColor: [
               'rgba(59, 130, 246, 0.5)',
               'rgba(59, 130, 246, 0.5)',
@@ -922,7 +922,7 @@
         scales: {
           y: {
             beginAtZero: false,
-            min: 2000,
+            min: 500,
             title: { display: true, text: '売上高（億円）' },
             ticks: { callback: function (v) { return v.toLocaleString(); } },
             grid: { color: 'rgba(0,0,0,0.04)' },
