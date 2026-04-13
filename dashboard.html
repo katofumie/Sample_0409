@@ -79,6 +79,12 @@
         </svg>
         <span>経営サマリー</span>
       </a>
+      <a href="#" class="nav-item" data-section="analysis">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+        </svg>
+        <span>実績分析</span>
+      </a>
       <a href="#" class="nav-item" data-section="projects">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M2 20h20"/><path d="M5 20V8l7-5 7 5v12"/>
@@ -111,12 +117,6 @@
           <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
         </svg>
         <span>営業・受注管理</span>
-      </a>
-      <a href="#" class="nav-item" data-section="analysis">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
-        </svg>
-        <span>実績分析</span>
       </a>
       <a href="#" class="nav-item" data-section="environment">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -778,28 +778,49 @@
       <!-- 用途別 -->
       <div class="subtab-content" id="subtab-usage">
         <div class="kpi-grid">
-          <div class="kpi-card"><div class="kpi-label">オフィスビル</div><div class="kpi-value" data-target="224">0</div><div class="kpi-unit">億円</div><div class="kpi-change positive">28.0%</div></div>
-          <div class="kpi-card"><div class="kpi-label">マンション・住宅</div><div class="kpi-value" data-target="168">0</div><div class="kpi-unit">億円</div><div class="kpi-change neutral">21.0%</div></div>
-          <div class="kpi-card"><div class="kpi-label">商業施設</div><div class="kpi-value" data-target="120">0</div><div class="kpi-unit">億円</div><div class="kpi-change neutral">15.0%</div></div>
-          <div class="kpi-card"><div class="kpi-label">その他</div><div class="kpi-value" data-target="288">0</div><div class="kpi-unit">億円</div><div class="kpi-change neutral">36.0%</div></div>
+          <div class="kpi-card accent-yellow">
+            <div class="kpi-label">住宅</div>
+            <div class="kpi-value" data-target="352">0</div>
+            <div class="kpi-unit">億円（構成比 44.0%）</div>
+            <div class="kpi-change negative">-2.1% 前年比</div>
+          </div>
+          <div class="kpi-card accent-green">
+            <div class="kpi-label">非住宅</div>
+            <div class="kpi-value" data-target="392">0</div>
+            <div class="kpi-unit">億円（構成比 49.0%）</div>
+            <div class="kpi-change positive">+12.6% 前年比</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">インフラ・土木</div>
+            <div class="kpi-value" data-target="56">0</div>
+            <div class="kpi-unit">億円（構成比 7.0%）</div>
+            <div class="kpi-change positive">+2.4% 前年比</div>
+          </div>
+          <div class="kpi-card accent-green">
+            <div class="kpi-label">非住宅比率 推移</div>
+            <div class="kpi-value kpi-decimal" data-target="49.0" data-decimals="1">0</div>
+            <div class="kpi-unit">%</div>
+            <div class="kpi-change positive">+5.2pt（3年前 43.8%）</div>
+          </div>
         </div>
         <div class="chart-row">
-          <div class="chart-card wide"><div class="chart-title">用途別 売上高</div><canvas id="chart-usage-bar"></canvas></div>
-          <div class="chart-card"><div class="chart-title">用途別 構成比</div><canvas id="chart-usage-pie"></canvas></div>
+          <div class="chart-card wide"><div class="chart-title">住宅 / 非住宅 構成比推移（過去5年）</div><canvas id="chart-usage-bar"></canvas></div>
+          <div class="chart-card"><div class="chart-title">用途別 構成比（2026年度）</div><canvas id="chart-usage-pie"></canvas></div>
         </div>
         <div class="table-card">
           <div class="table-title">用途別 実績詳細</div>
           <div class="table-wrapper">
             <table class="data-table">
-              <thead><tr><th>用途</th><th>売上高</th><th>構成比</th><th>前年比</th><th>件数</th><th>平均単価</th></tr></thead>
+              <thead><tr><th>用途</th><th>区分</th><th>売上高</th><th>構成比</th><th>前年比</th><th>件数</th><th>平均単価</th></tr></thead>
               <tbody>
-                <tr><td>オフィスビル</td><td class="text-right">224億円</td><td class="text-right">28.0%</td><td class="text-right positive">+7.2%</td><td class="text-right">6件</td><td class="text-right">37億円</td></tr>
-                <tr><td>マンション・住宅</td><td class="text-right">168億円</td><td class="text-right">21.0%</td><td class="text-right positive">+3.8%</td><td class="text-right">5件</td><td class="text-right">34億円</td></tr>
-                <tr><td>商業施設</td><td class="text-right">120億円</td><td class="text-right">15.0%</td><td class="text-right positive">+5.1%</td><td class="text-right">3件</td><td class="text-right">40億円</td></tr>
-                <tr><td>工場・倉庫</td><td class="text-right">104億円</td><td class="text-right">13.0%</td><td class="text-right positive">+9.5%</td><td class="text-right">4件</td><td class="text-right">26億円</td></tr>
-                <tr><td>公共施設</td><td class="text-right">96億円</td><td class="text-right">12.0%</td><td class="text-right negative">-1.8%</td><td class="text-right">3件</td><td class="text-right">32億円</td></tr>
-                <tr><td>インフラ・土木</td><td class="text-right">56億円</td><td class="text-right">7.0%</td><td class="text-right positive">+2.4%</td><td class="text-right">1件</td><td class="text-right">56億円</td></tr>
-                <tr><td>その他</td><td class="text-right">32億円</td><td class="text-right">4.0%</td><td class="text-right positive">+1.2%</td><td class="text-right">1件</td><td class="text-right">32億円</td></tr>
+                <tr><td>マンション</td><td><span class="badge badge-blue">住宅</span></td><td class="text-right">248億円</td><td class="text-right">31.0%</td><td class="text-right negative">-3.5%</td><td class="text-right">7件</td><td class="text-right">35億円</td></tr>
+                <tr><td>戸建住宅</td><td><span class="badge badge-blue">住宅</span></td><td class="text-right">104億円</td><td class="text-right">13.0%</td><td class="text-right positive">+1.2%</td><td class="text-right">4件</td><td class="text-right">26億円</td></tr>
+                <tr class="row-current"><td>倉庫・物流施設</td><td><span class="badge badge-green">非住宅</span></td><td class="text-right">128億円</td><td class="text-right">16.0%</td><td class="text-right positive">+22.4%</td><td class="text-right">4件</td><td class="text-right">32億円</td></tr>
+                <tr class="row-current"><td>学校・教育施設</td><td><span class="badge badge-green">非住宅</span></td><td class="text-right">88億円</td><td class="text-right">11.0%</td><td class="text-right positive">+15.8%</td><td class="text-right">3件</td><td class="text-right">29億円</td></tr>
+                <tr class="row-current"><td>商業施設</td><td><span class="badge badge-green">非住宅</span></td><td class="text-right">80億円</td><td class="text-right">10.0%</td><td class="text-right positive">+8.1%</td><td class="text-right">2件</td><td class="text-right">40億円</td></tr>
+                <tr class="row-current"><td>工場</td><td><span class="badge badge-green">非住宅</span></td><td class="text-right">56億円</td><td class="text-right">7.0%</td><td class="text-right positive">+5.7%</td><td class="text-right">2件</td><td class="text-right">28億円</td></tr>
+                <tr class="row-current"><td>医療・福祉施設</td><td><span class="badge badge-green">非住宅</span></td><td class="text-right">40億円</td><td class="text-right">5.0%</td><td class="text-right positive">+11.1%</td><td class="text-right">1件</td><td class="text-right">40億円</td></tr>
+                <tr><td>インフラ・土木</td><td><span class="badge badge-blue">土木</span></td><td class="text-right">56億円</td><td class="text-right">7.0%</td><td class="text-right positive">+2.4%</td><td class="text-right">1件</td><td class="text-right">56億円</td></tr>
               </tbody>
             </table>
           </div>

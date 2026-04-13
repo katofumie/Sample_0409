@@ -846,32 +846,91 @@
       options: { cutout: '62%', plugins: { legend: { position: 'bottom' }, tooltip: { callbacks: { label: function(c){return c.label+': '+c.parsed+'%';} } } } },
     });
 
-    // 用途別
+    // 用途別: 住宅 / 非住宅 構成比推移（5年スタック棒グラフ）
     createChart('chart-usage-bar', {
       type: 'bar',
       data: {
-        labels: ['オフィスビル', 'マンション', '商業施設', '工場・倉庫', '公共施設', 'インフラ', 'その他'],
-        datasets: [{
-          label: '売上高（億円）',
-          data: [224, 168, 120, 104, 96, 56, 32],
-          backgroundColor: [COLORS.primary, '#60a5fa', COLORS.success, COLORS.warning, COLORS.info, '#a78bfa', COLORS.gray],
-          borderRadius: 4, barPercentage: 0.55,
-        }],
+        labels: ['2022', '2023', '2024', '2025', '2026'],
+        datasets: [
+          {
+            label: '住宅',
+            data: [336, 348, 358, 360, 352],
+            backgroundColor: '#f59e0b',
+            borderRadius: 4,
+          },
+          {
+            label: '非住宅',
+            data: [262, 287, 310, 348, 392],
+            backgroundColor: COLORS.success,
+            borderRadius: 4,
+          },
+          {
+            label: 'インフラ・土木',
+            data: [50, 48, 52, 55, 56],
+            backgroundColor: COLORS.gray,
+            borderRadius: 4,
+          },
+          {
+            label: '非住宅比率',
+            type: 'line',
+            data: [40.4, 42.0, 43.1, 45.6, 49.0],
+            borderColor: '#059669',
+            pointBackgroundColor: '#059669',
+            pointRadius: 4,
+            borderWidth: 2.5,
+            tension: 0.3,
+            yAxisID: 'y1',
+          },
+        ],
       },
       options: {
-        indexAxis: 'y',
-        plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(c){return c.parsed.x+'億円';} } } },
-        scales: { x: { beginAtZero: true, ticks: { callback: function(v){return v+'億';} }, grid: { color: 'rgba(0,0,0,0.04)' } }, y: { grid: { display: false } } },
+        plugins: {
+          legend: { position: 'top' },
+          tooltip: {
+            callbacks: {
+              label: function(c) {
+                if (c.datasetIndex === 3) return '非住宅比率: ' + c.parsed.y + '%';
+                return c.dataset.label + ': ' + c.parsed.y + '億円';
+              },
+            },
+          },
+        },
+        scales: {
+          y: {
+            stacked: true,
+            beginAtZero: true,
+            ticks: { callback: function(v){return v+'億';} },
+            grid: { color: 'rgba(0,0,0,0.04)' },
+          },
+          y1: {
+            position: 'right',
+            min: 35,
+            max: 55,
+            ticks: { callback: function(v){return v+'%';} },
+            grid: { display: false },
+          },
+          x: { stacked: true, grid: { display: false } },
+        },
       },
     });
 
     createChart('chart-usage-pie', {
       type: 'doughnut',
       data: {
-        labels: ['オフィスビル', 'マンション', '商業施設', '工場・倉庫', '公共施設', 'インフラ', 'その他'],
-        datasets: [{ data: [28, 21, 15, 13, 12, 7, 4], backgroundColor: [COLORS.primary, '#60a5fa', COLORS.success, COLORS.warning, COLORS.info, '#a78bfa', COLORS.gray], borderWidth: 0, spacing: 2 }],
+        labels: ['マンション', '戸建住宅', '倉庫・物流', '学校・教育', '商業施設', '工場', '医療・福祉', 'インフラ'],
+        datasets: [{
+          data: [31, 13, 16, 11, 10, 7, 5, 7],
+          backgroundColor: ['#f59e0b', '#fbbf24', COLORS.success, '#34d399', COLORS.primary, '#60a5fa', COLORS.info, COLORS.gray],
+          borderWidth: 0, spacing: 2,
+        }],
       },
-      options: { cutout: '62%', plugins: { legend: { position: 'bottom' }, tooltip: { callbacks: { label: function(c){return c.label+': '+c.parsed+'%';} } } } },
+      options: {
+        cutout: '62%',
+        plugins: {
+          legend: { position: 'bottom' },
+          tooltip: { callbacks: { label: function(c){return c.label+': '+c.parsed+'%';} } },
+        },
+      },
     });
 
     // 発注者別 推移
