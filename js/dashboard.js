@@ -917,10 +917,10 @@
     createChart('chart-usage-pie', {
       type: 'doughnut',
       data: {
-        labels: ['マンション', '戸建住宅', '倉庫・物流', 'オフィスビル', '学校・教育', '商業施設', '工場', '医療・福祉', 'インフラ'],
+        labels: ['マンション', '倉庫・物流', 'オフィスビル', '学校・教育', '商業施設', '工場', '医療・福祉', 'インフラ'],
         datasets: [{
-          data: [31, 13, 13.5, 11, 9, 7, 5, 3.5, 7],
-          backgroundColor: ['#f59e0b', '#fbbf24', COLORS.success, '#10b981', '#34d399', COLORS.primary, '#60a5fa', COLORS.info, COLORS.gray],
+          data: [44, 13.5, 11, 9, 7, 5, 3.5, 7],
+          backgroundColor: ['#f59e0b', COLORS.success, '#10b981', '#34d399', COLORS.primary, '#60a5fa', COLORS.info, COLORS.gray],
           borderWidth: 0, spacing: 2,
         }],
       },
