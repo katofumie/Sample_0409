@@ -195,6 +195,7 @@
       personnel: initPersonnelCharts,
       finance: initFinanceCharts,
       sales: initSalesCharts,
+      analysis: initAnalysisCharts,
       environment: initEnvironmentCharts,
     };
 
@@ -817,6 +818,109 @@
     });
   }
 
+  // ----- 実績分析 -----
+  function initAnalysisCharts() {
+    // エリア別 売上高推移（3年比較）
+    createChart('chart-area-trend', {
+      type: 'bar',
+      data: {
+        labels: ['東京', '大阪', '名古屋', '福岡', 'その他'],
+        datasets: [
+          { label: '2024', data: [298, 178, 116, 58, 61], backgroundColor: 'rgba(148,163,184,0.4)', borderRadius: 4, barPercentage: 0.7 },
+          { label: '2025', data: [320, 191, 124, 67, 61], backgroundColor: 'rgba(59,130,246,0.4)', borderRadius: 4, barPercentage: 0.7 },
+          { label: '2026', data: [340, 200, 128, 72, 60], backgroundColor: COLORS.primary, borderRadius: 4, barPercentage: 0.7 },
+        ],
+      },
+      options: {
+        plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: function(c){return c.dataset.label+': '+c.parsed.y+'億円';} } } },
+        scales: { y: { beginAtZero: true, ticks: { callback: function(v){return v+'億';} }, grid: { color: 'rgba(0,0,0,0.04)' } }, x: { grid: { display: false } } },
+      },
+    });
+
+    createChart('chart-area-pie', {
+      type: 'doughnut',
+      data: {
+        labels: ['東京', '大阪', '名古屋', '福岡', 'その他'],
+        datasets: [{ data: [42.5, 25, 16, 9, 7.5], backgroundColor: [COLORS.primary, COLORS.success, COLORS.warning, COLORS.info, COLORS.gray], borderWidth: 0, spacing: 2 }],
+      },
+      options: { cutout: '62%', plugins: { legend: { position: 'bottom' }, tooltip: { callbacks: { label: function(c){return c.label+': '+c.parsed+'%';} } } } },
+    });
+
+    // 用途別
+    createChart('chart-usage-bar', {
+      type: 'bar',
+      data: {
+        labels: ['オフィスビル', 'マンション', '商業施設', '工場・倉庫', '公共施設', 'インフラ', 'その他'],
+        datasets: [{
+          label: '売上高（億円）',
+          data: [224, 168, 120, 104, 96, 56, 32],
+          backgroundColor: [COLORS.primary, '#60a5fa', COLORS.success, COLORS.warning, COLORS.info, '#a78bfa', COLORS.gray],
+          borderRadius: 4, barPercentage: 0.55,
+        }],
+      },
+      options: {
+        indexAxis: 'y',
+        plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(c){return c.parsed.x+'億円';} } } },
+        scales: { x: { beginAtZero: true, ticks: { callback: function(v){return v+'億';} }, grid: { color: 'rgba(0,0,0,0.04)' } }, y: { grid: { display: false } } },
+      },
+    });
+
+    createChart('chart-usage-pie', {
+      type: 'doughnut',
+      data: {
+        labels: ['オフィスビル', 'マンション', '商業施設', '工場・倉庫', '公共施設', 'インフラ', 'その他'],
+        datasets: [{ data: [28, 21, 15, 13, 12, 7, 4], backgroundColor: [COLORS.primary, '#60a5fa', COLORS.success, COLORS.warning, COLORS.info, '#a78bfa', COLORS.gray], borderWidth: 0, spacing: 2 }],
+      },
+      options: { cutout: '62%', plugins: { legend: { position: 'bottom' }, tooltip: { callbacks: { label: function(c){return c.label+': '+c.parsed+'%';} } } } },
+    });
+
+    // 発注者別 推移
+    createChart('chart-client-trend', {
+      type: 'bar',
+      data: {
+        labels: ['デベロッパー', '官公庁', '一般企業', '鉄道・インフラ', '個人・その他'],
+        datasets: [
+          { label: '2024', data: [220, 163, 138, 92, 98], backgroundColor: 'rgba(148,163,184,0.4)', borderRadius: 4, barPercentage: 0.7 },
+          { label: '2025', data: [238, 170, 145, 98, 110], backgroundColor: 'rgba(59,130,246,0.4)', borderRadius: 4, barPercentage: 0.7 },
+          { label: '2026', data: [256, 176, 152, 104, 112], backgroundColor: COLORS.primary, borderRadius: 4, barPercentage: 0.7 },
+        ],
+      },
+      options: {
+        plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: function(c){return c.dataset.label+': '+c.parsed.y+'億円';} } } },
+        scales: { y: { beginAtZero: true, ticks: { callback: function(v){return v+'億';} }, grid: { color: 'rgba(0,0,0,0.04)' } }, x: { grid: { display: false } } },
+      },
+    });
+
+    createChart('chart-client-pie', {
+      type: 'doughnut',
+      data: {
+        labels: ['デベロッパー', '官公庁', '一般企業', '鉄道・インフラ', '個人・その他'],
+        datasets: [{ data: [32, 22, 19, 13, 14], backgroundColor: [COLORS.primary, COLORS.success, COLORS.warning, COLORS.info, COLORS.gray], borderWidth: 0, spacing: 2 }],
+      },
+      options: { cutout: '62%', plugins: { legend: { position: 'bottom' }, tooltip: { callbacks: { label: function(c){return c.label+': '+c.parsed+'%';} } } } },
+    });
+  }
+
+  // ===== Sub-tab switching =====
+  function initSubTabs() {
+    var tabs = document.querySelectorAll('.sub-tab');
+    tabs.forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        var parent = this.closest('.section');
+        parent.querySelectorAll('.sub-tab').forEach(function(t){ t.classList.remove('active'); });
+        this.classList.add('active');
+
+        var targetId = 'subtab-' + this.getAttribute('data-subtab');
+        parent.querySelectorAll('.subtab-content').forEach(function(c){ c.classList.remove('active'); });
+        var target = document.getElementById(targetId);
+        if (target) {
+          target.classList.add('active');
+          animateKPIs(target);
+        }
+      });
+    });
+  }
+
   // ===== Initialize =====
   function init() {
     setHeaderDate();
@@ -824,6 +928,7 @@
     initSidebarToggle();
     initNotification();
     initDrilldown();
+    initSubTabs();
 
     // Initialize first section
     var activeSection = document.querySelector('.section.active');

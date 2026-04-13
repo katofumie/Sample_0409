@@ -112,6 +112,12 @@
         </svg>
         <span>営業・受注管理</span>
       </a>
+      <a href="#" class="nav-item" data-section="analysis">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+        </svg>
+        <span>実績分析</span>
+      </a>
       <a href="#" class="nav-item" data-section="environment">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M12 22c4-4 8-7.5 8-12A8 8 0 0 0 4 10c0 4.5 4 8 8 12z"/>
@@ -727,6 +733,111 @@
     </section>
 
     <!-- ===== 7. 環境・ESG ===== -->
+    <!-- ===== 実績分析 ===== -->
+    <section class="section" id="section-analysis">
+      <div class="section-header">
+        <h2>実績分析</h2>
+        <span class="section-period">2026年度 累計</span>
+      </div>
+
+      <div class="sub-tabs">
+        <button class="sub-tab active" data-subtab="area">エリア別</button>
+        <button class="sub-tab" data-subtab="usage">用途別</button>
+        <button class="sub-tab" data-subtab="client">発注者別</button>
+      </div>
+
+      <!-- エリア別 -->
+      <div class="subtab-content active" id="subtab-area">
+        <div class="kpi-grid">
+          <div class="kpi-card"><div class="kpi-label">東京</div><div class="kpi-value" data-target="340">0</div><div class="kpi-unit">億円</div><div class="kpi-change positive">42.5%</div></div>
+          <div class="kpi-card"><div class="kpi-label">大阪</div><div class="kpi-value" data-target="200">0</div><div class="kpi-unit">億円</div><div class="kpi-change neutral">25.0%</div></div>
+          <div class="kpi-card"><div class="kpi-label">名古屋</div><div class="kpi-value" data-target="128">0</div><div class="kpi-unit">億円</div><div class="kpi-change neutral">16.0%</div></div>
+          <div class="kpi-card"><div class="kpi-label">福岡・その他</div><div class="kpi-value" data-target="132">0</div><div class="kpi-unit">億円</div><div class="kpi-change neutral">16.5%</div></div>
+        </div>
+        <div class="chart-row">
+          <div class="chart-card wide"><div class="chart-title">エリア別 売上高推移（過去3年比較）</div><canvas id="chart-area-trend"></canvas></div>
+          <div class="chart-card"><div class="chart-title">エリア別 構成比</div><canvas id="chart-area-pie"></canvas></div>
+        </div>
+        <div class="table-card">
+          <div class="table-title">エリア別 実績詳細</div>
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead><tr><th>エリア</th><th>売上高</th><th>構成比</th><th>前年比</th><th>進行PJ</th><th>営業利益率</th></tr></thead>
+              <tbody>
+                <tr><td>東京</td><td class="text-right">340億円</td><td class="text-right">42.5%</td><td class="text-right positive">+6.3%</td><td class="text-right">10件</td><td class="text-right">7.4%</td></tr>
+                <tr><td>大阪</td><td class="text-right">200億円</td><td class="text-right">25.0%</td><td class="text-right positive">+4.7%</td><td class="text-right">5件</td><td class="text-right">6.8%</td></tr>
+                <tr><td>名古屋</td><td class="text-right">128億円</td><td class="text-right">16.0%</td><td class="text-right positive">+3.2%</td><td class="text-right">4件</td><td class="text-right">7.1%</td></tr>
+                <tr><td>福岡</td><td class="text-right">72億円</td><td class="text-right">9.0%</td><td class="text-right positive">+8.1%</td><td class="text-right">2件</td><td class="text-right">6.5%</td></tr>
+                <tr><td>その他</td><td class="text-right">60億円</td><td class="text-right">7.5%</td><td class="text-right negative">-2.4%</td><td class="text-right">2件</td><td class="text-right">5.8%</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 用途別 -->
+      <div class="subtab-content" id="subtab-usage">
+        <div class="kpi-grid">
+          <div class="kpi-card"><div class="kpi-label">オフィスビル</div><div class="kpi-value" data-target="224">0</div><div class="kpi-unit">億円</div><div class="kpi-change positive">28.0%</div></div>
+          <div class="kpi-card"><div class="kpi-label">マンション・住宅</div><div class="kpi-value" data-target="168">0</div><div class="kpi-unit">億円</div><div class="kpi-change neutral">21.0%</div></div>
+          <div class="kpi-card"><div class="kpi-label">商業施設</div><div class="kpi-value" data-target="120">0</div><div class="kpi-unit">億円</div><div class="kpi-change neutral">15.0%</div></div>
+          <div class="kpi-card"><div class="kpi-label">その他</div><div class="kpi-value" data-target="288">0</div><div class="kpi-unit">億円</div><div class="kpi-change neutral">36.0%</div></div>
+        </div>
+        <div class="chart-row">
+          <div class="chart-card wide"><div class="chart-title">用途別 売上高</div><canvas id="chart-usage-bar"></canvas></div>
+          <div class="chart-card"><div class="chart-title">用途別 構成比</div><canvas id="chart-usage-pie"></canvas></div>
+        </div>
+        <div class="table-card">
+          <div class="table-title">用途別 実績詳細</div>
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead><tr><th>用途</th><th>売上高</th><th>構成比</th><th>前年比</th><th>件数</th><th>平均単価</th></tr></thead>
+              <tbody>
+                <tr><td>オフィスビル</td><td class="text-right">224億円</td><td class="text-right">28.0%</td><td class="text-right positive">+7.2%</td><td class="text-right">6件</td><td class="text-right">37億円</td></tr>
+                <tr><td>マンション・住宅</td><td class="text-right">168億円</td><td class="text-right">21.0%</td><td class="text-right positive">+3.8%</td><td class="text-right">5件</td><td class="text-right">34億円</td></tr>
+                <tr><td>商業施設</td><td class="text-right">120億円</td><td class="text-right">15.0%</td><td class="text-right positive">+5.1%</td><td class="text-right">3件</td><td class="text-right">40億円</td></tr>
+                <tr><td>工場・倉庫</td><td class="text-right">104億円</td><td class="text-right">13.0%</td><td class="text-right positive">+9.5%</td><td class="text-right">4件</td><td class="text-right">26億円</td></tr>
+                <tr><td>公共施設</td><td class="text-right">96億円</td><td class="text-right">12.0%</td><td class="text-right negative">-1.8%</td><td class="text-right">3件</td><td class="text-right">32億円</td></tr>
+                <tr><td>インフラ・土木</td><td class="text-right">56億円</td><td class="text-right">7.0%</td><td class="text-right positive">+2.4%</td><td class="text-right">1件</td><td class="text-right">56億円</td></tr>
+                <tr><td>その他</td><td class="text-right">32億円</td><td class="text-right">4.0%</td><td class="text-right positive">+1.2%</td><td class="text-right">1件</td><td class="text-right">32億円</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 発注者別 -->
+      <div class="subtab-content" id="subtab-client">
+        <div class="kpi-grid">
+          <div class="kpi-card"><div class="kpi-label">民間デベロッパー</div><div class="kpi-value" data-target="256">0</div><div class="kpi-unit">億円</div><div class="kpi-change positive">32.0%</div></div>
+          <div class="kpi-card"><div class="kpi-label">官公庁</div><div class="kpi-value" data-target="176">0</div><div class="kpi-unit">億円</div><div class="kpi-change neutral">22.0%</div></div>
+          <div class="kpi-card"><div class="kpi-label">一般企業</div><div class="kpi-value" data-target="152">0</div><div class="kpi-unit">億円</div><div class="kpi-change neutral">19.0%</div></div>
+          <div class="kpi-card"><div class="kpi-label">鉄道・インフラ他</div><div class="kpi-value" data-target="216">0</div><div class="kpi-unit">億円</div><div class="kpi-change neutral">27.0%</div></div>
+        </div>
+        <div class="chart-row">
+          <div class="chart-card wide"><div class="chart-title">発注者別 売上高推移（過去3年比較）</div><canvas id="chart-client-trend"></canvas></div>
+          <div class="chart-card"><div class="chart-title">発注者別 構成比</div><canvas id="chart-client-pie"></canvas></div>
+        </div>
+        <div class="table-card">
+          <div class="table-title">主要発注者 実績</div>
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead><tr><th>発注者</th><th>分類</th><th>売上高</th><th>前年比</th><th>進行PJ</th><th>取引年数</th></tr></thead>
+              <tbody>
+                <tr><td class="project-name">三井不動産</td><td>デベロッパー</td><td class="text-right">98億円</td><td class="text-right positive">+12.3%</td><td class="text-right">3件</td><td class="text-right">18年</td></tr>
+                <tr><td class="project-name">国土交通省</td><td>官公庁</td><td class="text-right">72億円</td><td class="text-right positive">+3.1%</td><td class="text-right">2件</td><td class="text-right">25年</td></tr>
+                <tr><td class="project-name">住友不動産</td><td>デベロッパー</td><td class="text-right">68億円</td><td class="text-right negative">-4.2%</td><td class="text-right">2件</td><td class="text-right">15年</td></tr>
+                <tr><td class="project-name">トヨタ自動車</td><td>一般企業</td><td class="text-right">52億円</td><td class="text-right positive">+18.5%</td><td class="text-right">2件</td><td class="text-right">8年</td></tr>
+                <tr><td class="project-name">JR東海</td><td>鉄道</td><td class="text-right">48億円</td><td class="text-right positive">+6.7%</td><td class="text-right">1件</td><td class="text-right">12年</td></tr>
+                <tr><td class="project-name">大阪市</td><td>官公庁</td><td class="text-right">45億円</td><td class="text-right positive">+2.8%</td><td class="text-right">2件</td><td class="text-right">20年</td></tr>
+                <tr><td class="project-name">その他（17社）</td><td>-</td><td class="text-right">417億円</td><td class="text-right positive">+4.1%</td><td class="text-right">11件</td><td class="text-right">-</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="section" id="section-environment">
       <div class="section-header">
         <h2>環境・サステナビリティ</h2>

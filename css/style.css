@@ -837,6 +837,46 @@ canvas {
   text-align: right;
 }
 
+/* ===== Sub Tabs (Analysis Section) ===== */
+.sub-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.sub-tab {
+  padding: 6px 18px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.sub-tab:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.sub-tab.active {
+  background: var(--color-primary);
+  color: #fff;
+  border-color: var(--color-primary);
+}
+
+.subtab-content {
+  display: none;
+}
+
+.subtab-content.active {
+  display: block;
+  animation: fadeIn 0.2s ease;
+}
+
 /* ===== Drilldown KPI ===== */
 .kpi-clickable {
   cursor: pointer;
