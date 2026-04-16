@@ -345,12 +345,21 @@ body {
   font-size: 0.65rem; font-weight: 500; color: var(--text-light);
 }
 
-.mini-kpi-sub {
-  display: block;
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: var(--blue);
-  margin-top: 1px;
+.mini-kpi-dual-row {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.mini-kpi-half {
+  flex: 1;
+  text-align: center;
+}
+
+.mini-kpi-divider {
+  width: 1px;
+  height: 28px;
+  background: #e2e8f0;
 }
 
 .mini-kpi-change {
