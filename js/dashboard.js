@@ -997,112 +997,165 @@
     initSectionCharts('executive');
   }
 
-  // ===== Drilldown Modal =====
+  // ===== Drilldown Modal (汎用4指標対応) =====
+  var DRILL_DATA = {
+    revenue: {
+      title: '売上高 年度推移（過去5年）',
+      kpis: [
+        { label: '2026年度（見込）', value: '800', unit: '億円' },
+        { label: '5年間 成長率', value: '+18.7', unit: '%', cls: 'up' },
+        { label: 'CAGR', value: '3.5', unit: '%' },
+      ],
+      chart: { label: '売上高（億円）', data: [674, 706, 731, 761, 800], min: 500, subLabel: '営業利益率（%）', subData: [5.8, 6.1, 6.2, 6.8, 7.0], subMin: 4, subMax: 9 },
+      headers: ['年度','売上高','前年比','営業利益','営業利益率','利益率増減'],
+      rows: [
+        ['2022','674億円','-','39億円','5.8%','-'],
+        ['2023','706億円','+4.8%','43億円','6.1%','+0.3pt'],
+        ['2024','731億円','+3.5%','45億円','6.2%','+0.1pt'],
+        ['2025','761億円','+4.0%','52億円','6.8%','+0.6pt'],
+        ['2026（見込）','800億円','+5.2%','56億円','7.0%','+0.2pt'],
+      ],
+    },
+    profit: {
+      title: '営業利益 年度推移（過去5年）',
+      kpis: [
+        { label: '2026年度（見込）', value: '56', unit: '億円' },
+        { label: '5年間 成長率', value: '+43.6', unit: '%', cls: 'up' },
+        { label: '営業利益率', value: '7.0', unit: '%' },
+      ],
+      chart: { label: '営業利益（億円）', data: [39, 43, 45, 52, 56], min: 20, subLabel: '営業利益率（%）', subData: [5.8, 6.1, 6.2, 6.8, 7.0], subMin: 4, subMax: 9 },
+      headers: ['年度','営業利益','前年比','売上高','営業利益率','利益率増減'],
+      rows: [
+        ['2022','39億円','-','674億円','5.8%','-'],
+        ['2023','43億円','+10.3%','706億円','6.1%','+0.3pt'],
+        ['2024','45億円','+4.7%','731億円','6.2%','+0.1pt'],
+        ['2025','52億円','+15.6%','761億円','6.8%','+0.6pt'],
+        ['2026（見込）','56億円','+7.7%','800億円','7.0%','+0.2pt'],
+      ],
+    },
+    backlog: {
+      title: '受注残高 年度推移（過去5年）',
+      kpis: [
+        { label: '2026年度', value: '1,270', unit: '億円' },
+        { label: '5年間 成長率', value: '+22.1', unit: '%', cls: 'up' },
+        { label: '売上高倍率', value: '1.59', unit: '倍' },
+      ],
+      chart: { label: '受注残高（億円）', data: [1040, 1085, 1128, 1225, 1270], min: 800, subLabel: '受注残/売上高 倍率', subData: [1.54, 1.54, 1.54, 1.61, 1.59], subMin: 1.3, subMax: 1.8 },
+      headers: ['年度','受注残高','前年比','新規受注','完工高','残高/売上倍率'],
+      rows: [
+        ['2022','1,040億円','-','698億円','650億円','1.54倍'],
+        ['2023','1,085億円','+4.3%','751億円','706億円','1.54倍'],
+        ['2024','1,128億円','+4.0%','774億円','731億円','1.54倍'],
+        ['2025','1,225億円','+8.6%','858億円','761億円','1.61倍'],
+        ['2026（見込）','1,270億円','+3.7%','815億円','740億円','1.59倍'],
+      ],
+    },
+    completed: {
+      title: '完工高 年度推移（過去5年）',
+      kpis: [
+        { label: '2026年度（見込）', value: '740', unit: '億円' },
+        { label: '5年間 成長率', value: '+13.8', unit: '%', cls: 'up' },
+        { label: '完工/受注比率', value: '90.8', unit: '%' },
+      ],
+      chart: { label: '完工高（億円）', data: [650, 706, 731, 749, 740], min: 500, subLabel: '完工/受注 比率（%）', subData: [93.1, 94.0, 94.4, 87.3, 90.8], subMin: 80, subMax: 100 },
+      headers: ['年度','完工高','前年比','新規受注','完工/受注比','大型竣工件数'],
+      rows: [
+        ['2022','650億円','-','698億円','93.1%','2件'],
+        ['2023','706億円','+8.6%','751億円','94.0%','3件'],
+        ['2024','731億円','+3.5%','774億円','94.4%','3件'],
+        ['2025','749億円','+2.5%','858億円','87.3%','2件'],
+        ['2026（見込）','740億円','-1.2%','815億円','90.8%','4件'],
+      ],
+    },
+  };
+
+  var drillChart = null;
+
   function initDrilldown() {
-    var kpiCard = document.getElementById('kpi-revenue');
     var overlay = document.getElementById('modalOverlay');
     var closeBtn = document.getElementById('modalClose');
-    if (!kpiCard || !overlay) return;
+    if (!overlay) return;
 
-    var drillChartCreated = false;
+    var kpiIds = ['kpi-revenue', 'kpi-profit', 'kpi-backlog', 'kpi-completed'];
+    var dataKeys = ['revenue', 'profit', 'backlog', 'completed'];
 
-    kpiCard.addEventListener('click', function () {
-      overlay.classList.add('open');
-      if (!drillChartCreated) {
-        drillChartCreated = true;
-        initDrilldownChart();
-      }
+    kpiIds.forEach(function(id, i) {
+      var card = document.getElementById(id);
+      if (!card) return;
+      card.addEventListener('click', function() {
+        openDrilldown(dataKeys[i]);
+      });
     });
 
-    closeBtn.addEventListener('click', function () {
-      overlay.classList.remove('open');
-    });
-
-    overlay.addEventListener('click', function (e) {
-      if (e.target === overlay) overlay.classList.remove('open');
-    });
-
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') overlay.classList.remove('open');
-    });
+    closeBtn.addEventListener('click', function() { overlay.classList.remove('open'); });
+    overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.classList.remove('open'); });
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') overlay.classList.remove('open'); });
   }
 
-  function initDrilldownChart() {
-    var canvas = document.getElementById('chart-revenue-drill');
-    if (!canvas) return;
+  function openDrilldown(key) {
+    var d = DRILL_DATA[key];
+    var overlay = document.getElementById('modalOverlay');
+    document.getElementById('modalTitle').textContent = d.title;
 
-    new Chart(canvas, {
+    // KPIs
+    var kpiHtml = '';
+    d.kpis.forEach(function(k) {
+      kpiHtml += '<div class="modal-kpi"><div class="modal-kpi-label">' + k.label + '</div>';
+      kpiHtml += '<div class="modal-kpi-value' + (k.cls ? ' ' + k.cls : '') + '">' + k.value + '<small>' + k.unit + '</small></div></div>';
+    });
+    document.getElementById('modalKpis').innerHTML = kpiHtml;
+
+    // Table
+    var tHtml = '<table class="modal-table"><thead><tr>';
+    d.headers.forEach(function(h) { tHtml += '<th>' + h + '</th>'; });
+    tHtml += '</tr></thead><tbody>';
+    d.rows.forEach(function(row, ri) {
+      var isCurrent = ri === d.rows.length - 1;
+      tHtml += '<tr' + (isCurrent ? ' class="row-current"' : '') + '>';
+      row.forEach(function(cell, ci) {
+        var cls = ci > 0 ? ' class="text-right' + (cell.indexOf('+') === 0 ? ' positive' : '') + '"' : '';
+        var wrap = isCurrent ? '<strong>' + cell + '</strong>' : cell;
+        tHtml += '<td' + cls + '>' + wrap + '</td>';
+      });
+      tHtml += '</tr>';
+    });
+    tHtml += '</tbody></table>';
+    document.getElementById('modalTableWrap').innerHTML = tHtml;
+
+    // Chart
+    if (drillChart) drillChart.destroy();
+    var canvas = document.getElementById('chart-drill');
+    var c = d.chart;
+    drillChart = new Chart(canvas, {
       type: 'bar',
       data: {
         labels: ['2022', '2023', '2024', '2025', '2026（見込）'],
         datasets: [
           {
-            label: '売上高（億円）',
-            data: [674, 706, 731, 761, 800],
-            backgroundColor: [
-              'rgba(59, 130, 246, 0.5)',
-              'rgba(59, 130, 246, 0.5)',
-              'rgba(59, 130, 246, 0.5)',
-              'rgba(59, 130, 246, 0.5)',
-              'rgba(29, 78, 216, 0.8)',
-            ],
-            borderRadius: 6,
-            barPercentage: 0.55,
-            yAxisID: 'y',
+            label: c.label, data: c.data,
+            backgroundColor: ['rgba(59,130,246,0.5)','rgba(59,130,246,0.5)','rgba(59,130,246,0.5)','rgba(59,130,246,0.5)','rgba(29,78,216,0.8)'],
+            borderRadius: 6, barPercentage: 0.55, yAxisID: 'y',
           },
           {
-            label: '営業利益率（%）',
-            type: 'line',
-            data: [5.8, 6.1, 6.2, 6.8, 7.0],
-            borderColor: '#10b981',
-            backgroundColor: 'rgba(16, 185, 129, 0.1)',
-            fill: true,
-            tension: 0.3,
-            pointRadius: 5,
-            pointBackgroundColor: '#10b981',
-            borderWidth: 2.5,
-            yAxisID: 'y1',
+            label: c.subLabel, type: 'line', data: c.subData,
+            borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,0.1)', fill: true,
+            tension: 0.3, pointRadius: 5, pointBackgroundColor: '#10b981', borderWidth: 2.5, yAxisID: 'y1',
           },
         ],
       },
       options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        interaction: {
-          mode: 'index',
-          intersect: false,
-        },
-        plugins: {
-          legend: { position: 'top' },
-          tooltip: {
-            callbacks: {
-              label: function (ctx) {
-                if (ctx.datasetIndex === 0) return '売上高: ' + ctx.parsed.y.toLocaleString() + '億円';
-                return '営業利益率: ' + ctx.parsed.y + '%';
-              },
-            },
-          },
-        },
+        responsive: true, maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: { legend: { position: 'top' } },
         scales: {
-          y: {
-            beginAtZero: false,
-            min: 500,
-            title: { display: true, text: '売上高（億円）' },
-            ticks: { callback: function (v) { return v.toLocaleString(); } },
-            grid: { color: 'rgba(0,0,0,0.04)' },
-          },
-          y1: {
-            position: 'right',
-            min: 4,
-            max: 9,
-            title: { display: true, text: '営業利益率（%）' },
-            ticks: { callback: function (v) { return v + '%'; } },
-            grid: { display: false },
-          },
+          y: { min: c.min, ticks: { callback: function(v){return v.toLocaleString();} }, grid: { color: 'rgba(0,0,0,0.04)' } },
+          y1: { position: 'right', min: c.subMin, max: c.subMax, grid: { display: false } },
           x: { grid: { display: false } },
         },
       },
     });
+
+    overlay.classList.add('open');
   }
 
   // Wait for DOM
