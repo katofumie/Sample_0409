@@ -319,7 +319,7 @@ body {
 
 .mini-kpi-row {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   gap: 10px;
 }
 
@@ -343,6 +343,14 @@ body {
 
 .mini-kpi-value small {
   font-size: 0.65rem; font-weight: 500; color: var(--text-light);
+}
+
+.mini-kpi-sub {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--blue);
+  margin-top: 1px;
 }
 
 .mini-kpi-change {
